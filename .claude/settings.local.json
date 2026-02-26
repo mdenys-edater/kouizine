@@ -4,7 +4,8 @@
       "Bash(python3 -c \":*)",
       "Bash(python3 -c \"import os; print\\(os.path.exists\\(''C:/Users/denys/Documents/RerollRP/kouizine/Recettes.xlsx''\\)\\); print\\(os.listdir\\(''C:/Users/denys/Documents/RerollRP/kouizine/''\\)\\)\")",
       "Bash(npm install)",
-      "Bash(npx vite build)"
+      "Bash(npx vite build)",
+      "Bash(npm run build)"
     ]
   }
 }
