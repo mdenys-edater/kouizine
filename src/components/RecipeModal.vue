@@ -21,6 +21,7 @@
           <h2 class="text-xl font-bold leading-tight pr-8">{{ recipe.name }}</h2>
           <p class="text-teal-200 text-sm mt-1">
             {{ recipe.ingredients.length }} ingrédient{{ recipe.ingredients.length > 1 ? 's' : '' }}
+            <span v-if="fishCount > 0" class="ml-1">· 🎣 {{ fishCount }} à pêcher</span>
           </p>
         </div>
 
@@ -34,20 +35,34 @@
               class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0"
             >
               <div class="flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0" />
+                <span
+                  :class="ing.isFish ? 'w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0' : 'w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0'"
+                />
                 <span class="text-stone-700 text-sm">{{ ing.name }}</span>
               </div>
-              <span class="text-stone-400 text-sm font-medium">{{ ing.price }}€</span>
+              <span v-if="ing.isFish" class="text-blue-500 text-xs font-medium flex items-center gap-1">
+                🎣 Pêche
+              </span>
+              <span v-else class="text-stone-400 text-sm font-medium">{{ ing.price }}€</span>
             </div>
           </div>
 
           <!-- Total -->
-          <div class="mt-5 pt-4 border-t-2 border-stone-100 flex items-center justify-between">
-            <div>
-              <p class="text-xs text-stone-400 font-medium">Prix de vente</p>
-              <p class="text-stone-600 text-xs mt-0.5">Somme des ingrédients</p>
+          <div class="mt-5 pt-4 border-t-2 border-stone-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs text-stone-400 font-medium">Prix de vente</p>
+                <p class="text-stone-600 text-xs mt-0.5">Affiché au menu</p>
+              </div>
+              <span class="text-3xl font-bold text-emerald-600">{{ recipe.price }}€</span>
             </div>
-            <span class="text-3xl font-bold text-emerald-600">{{ recipe.price }}€</span>
+            <div v-if="fishCount > 0" class="flex items-center justify-between mt-2">
+              <div>
+                <p class="text-xs text-stone-400 font-medium">Coût achats</p>
+                <p class="text-blue-500 text-xs mt-0.5">🎣 {{ fishCount }} ingrédient{{ fishCount > 1 ? 's' : '' }} gratuit{{ fishCount > 1 ? 's' : '' }}</p>
+              </div>
+              <span class="text-xl font-bold text-stone-600">{{ purchaseCost }}€</span>
+            </div>
           </div>
         </div>
       </div>
@@ -57,7 +72,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { getIngredientPrice } from '../data.js'
+import { getIngredientPrice, fishIngredients } from '../data.js'
 
 const props = defineProps({
   recipe: Object,
@@ -70,8 +85,17 @@ const ingredientDetails = computed(() => {
   return props.recipe.ingredients.map(name => ({
     name,
     price: getIngredientPrice(name),
+    isFish: fishIngredients.has(name),
   }))
 })
+
+const fishCount = computed(() =>
+  ingredientDetails.value.filter(i => i.isFish).length
+)
+
+const purchaseCost = computed(() =>
+  ingredientDetails.value.filter(i => !i.isFish).reduce((s, i) => s + i.price, 0)
+)
 </script>
 
 <style scoped>

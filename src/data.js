@@ -120,6 +120,17 @@ export const recipes = [
   { name: 'Thon riz', ingredients: ['Thon', 'Riz', 'Salade'], price: 15 },
 ]
 
+export const fishIngredients = new Set([
+  'Calamar',
+  'Crabe',
+  'Crevette',
+  'Homard',
+  'Moule',
+  'Saumon',
+  'Thon',
+  'Truite',
+])
+
 export function getIngredientPrice(name) {
   return ingredients.find(i => i.name === name)?.price ?? 0
 }

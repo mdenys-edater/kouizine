@@ -5,7 +5,7 @@
       <div>
         <h2 class="text-xl font-bold text-stone-800">🥗 Hello Fresh</h2>
         <p class="text-stone-500 text-sm mt-1">
-          Distribution aléatoire — 600 plats (max 100/recette) · 1 200 boissons (max 600/recette)
+          8 plats × 60 portions · 2 desserts × 40 portions · liste de courses complète
         </p>
       </div>
       <button @click="generate" :disabled="loading" class="btn-primary text-base px-6 py-3">
@@ -14,20 +14,20 @@
       </button>
     </div>
 
-    <!-- Stats (visible après génération) -->
+    <!-- Stats -->
     <Transition name="fade">
       <div v-if="generated" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <div class="stat-card">
-          <div class="text-2xl font-bold text-teal-700">600</div>
-          <div class="text-xs text-stone-500 mt-0.5">plats</div>
+          <div class="text-2xl font-bold text-teal-700">480</div>
+          <div class="text-xs text-stone-500 mt-0.5">portions plats</div>
         </div>
         <div class="stat-card">
-          <div class="text-2xl font-bold text-teal-700">1 200</div>
-          <div class="text-xs text-stone-500 mt-0.5">boissons</div>
+          <div class="text-2xl font-bold text-teal-700">80</div>
+          <div class="text-xs text-stone-500 mt-0.5">portions desserts</div>
         </div>
         <div class="stat-card">
-          <div class="text-2xl font-bold text-teal-700">{{ shoppingList.length }}</div>
-          <div class="text-xs text-stone-500 mt-0.5">ingrédients</div>
+          <div class="text-2xl font-bold text-teal-700">{{ toBuyList.length }}</div>
+          <div class="text-xs text-stone-500 mt-0.5">à acheter</div>
         </div>
         <div class="stat-card">
           <div class="text-2xl font-bold text-emerald-600">{{ grandTotal.toLocaleString('fr') }}€</div>
@@ -37,65 +37,81 @@
     </Transition>
 
     <!-- Grille principale -->
-    <div v-if="generated" class="grid lg:grid-cols-[1fr_280px_340px] gap-6 items-start">
+    <div v-if="generated" class="grid lg:grid-cols-[1fr_1fr_360px] gap-6 items-start">
 
       <!-- ── Plats ── -->
       <div class="card p-4">
         <div class="flex items-center justify-between mb-3">
           <h3 class="font-semibold text-stone-700">🍽️ Plats</h3>
-          <span class="text-xs text-stone-400">
-            {{ activePlatCount }} recettes servies · max 100/plat
-          </span>
+          <span class="text-xs text-stone-400">8 recettes × 60 portions</span>
         </div>
-        <div class="space-y-1 max-h-[600px] overflow-y-auto -mx-1 px-1">
+        <div class="space-y-1.5">
           <div
-            v-for="[name, qty] in sortedPlats"
-            :key="name"
-            class="flex items-center justify-between py-1.5 border-b border-stone-50 last:border-0 gap-2"
+            v-for="recipe in selectedPlats"
+            :key="recipe.name"
+            class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-2"
           >
-            <span class="text-sm text-stone-700 truncate">{{ name }}</span>
-            <span class="badge bg-teal-100 text-teal-700 shrink-0 tabular-nums">×{{ qty }}</span>
+            <div class="min-w-0">
+              <div class="text-sm text-stone-700">{{ recipe.name }}</div>
+              <div class="flex flex-wrap gap-1 mt-1">
+                <span
+                  v-for="ing in recipe.ingredients"
+                  :key="ing"
+                  :class="fishIngredients.has(ing)
+                    ? 'badge bg-blue-50 text-blue-600 text-xs'
+                    : 'badge bg-stone-100 text-stone-400 text-xs'"
+                >
+                  <span v-if="fishIngredients.has(ing)">🎣 </span>{{ ing }}
+                </span>
+              </div>
+            </div>
+            <span class="badge bg-teal-100 text-teal-700 shrink-0 tabular-nums ml-2">×60</span>
           </div>
         </div>
       </div>
 
-      <!-- ── Boissons ── -->
+      <!-- ── Desserts ── -->
       <div class="card p-4">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold text-stone-700">🥤 Boissons</h3>
-          <span class="text-xs text-stone-400">max 600/boisson</span>
+          <h3 class="font-semibold text-stone-700">🍰 Desserts</h3>
+          <span class="text-xs text-stone-400">2 recettes × 40 portions</span>
         </div>
-        <div class="space-y-3">
-          <div v-for="[name, qty] in sortedBoissons" :key="name">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-sm text-stone-700 truncate mr-2">{{ name }}</span>
-              <span class="badge bg-teal-100 text-teal-700 shrink-0 tabular-nums">×{{ qty }}</span>
+        <div class="space-y-1.5">
+          <div
+            v-for="recipe in selectedDesserts"
+            :key="recipe.name"
+            class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-2"
+          >
+            <div class="min-w-0">
+              <div class="text-sm text-stone-700">{{ recipe.name }}</div>
+              <div class="flex flex-wrap gap-1 mt-1">
+                <span
+                  v-for="ing in recipe.ingredients"
+                  :key="ing"
+                  :class="fishIngredients.has(ing)
+                    ? 'badge bg-blue-50 text-blue-600 text-xs'
+                    : 'badge bg-stone-100 text-stone-400 text-xs'"
+                >
+                  <span v-if="fishIngredients.has(ing)">🎣 </span>{{ ing }}
+                </span>
+              </div>
             </div>
-            <!-- Barre de progression vers le max 600 -->
-            <div class="h-1.5 bg-stone-100 rounded-full overflow-hidden">
-              <div
-                class="h-full bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full transition-all duration-700"
-                :style="{ width: `${(qty / 600) * 100}%` }"
-              />
-            </div>
-            <div class="text-right text-xs text-stone-400 mt-0.5">
-              {{ Math.round((qty / 600) * 100) }}% du max
-            </div>
+            <span class="badge bg-teal-100 text-teal-700 shrink-0 tabular-nums ml-2">×40</span>
           </div>
         </div>
       </div>
 
       <!-- ── Liste de courses (sticky) ── -->
       <div class="lg:sticky lg:top-20 card p-5">
-        <div class="flex items-center justify-between mb-1">
-          <h3 class="font-bold text-stone-800">🛒 Liste de courses</h3>
-          <span class="text-xs text-stone-400">{{ shoppingList.length }} articles</span>
-        </div>
-        <p class="text-xs text-stone-400 mb-4">Tous plats + boissons confondus</p>
+        <h3 class="font-bold text-stone-800 mb-4">🛒 Liste de courses</h3>
 
-        <div class="space-y-1 max-h-[55vh] overflow-y-auto -mx-1 px-1">
+        <!-- À acheter -->
+        <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">
+          À acheter · {{ toBuyList.length }} articles
+        </p>
+        <div class="space-y-1 max-h-[30vh] overflow-y-auto -mx-1 px-1 mb-4">
           <div
-            v-for="item in shoppingList"
+            v-for="item in toBuyList"
             :key="item.name"
             class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-3"
           >
@@ -113,9 +129,27 @@
           </div>
         </div>
 
-        <div class="pt-4 border-t-2 border-stone-100 mt-2">
+        <!-- À pêcher -->
+        <p class="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-2">
+          🎣 À pêcher · {{ toFishList.length }} articles
+        </p>
+        <div class="space-y-1 max-h-[20vh] overflow-y-auto -mx-1 px-1 mb-4">
+          <div
+            v-for="item in toFishList"
+            :key="item.name"
+            class="flex items-center justify-between py-1.5 border-b border-stone-50 last:border-0 gap-3"
+          >
+            <div class="text-sm text-stone-600 font-medium truncate">{{ item.name }}</div>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-xs text-stone-400 tabular-nums">{{ item.count.toLocaleString('fr') }}×</span>
+              <span class="text-xs text-blue-500 font-medium">Gratuit</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t-2 border-stone-100">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-stone-800 text-lg">Total</span>
+            <span class="font-bold text-stone-800 text-lg">Total achats</span>
             <span class="text-2xl font-bold text-emerald-600 tabular-nums">
               {{ grandTotal.toLocaleString('fr') }}€
             </span>
@@ -129,8 +163,7 @@
       <div class="text-7xl mb-5 select-none">🎲</div>
       <p class="text-lg font-semibold text-stone-600">Aucun menu généré</p>
       <p class="text-sm mt-2 text-center max-w-sm leading-relaxed">
-        Génère une distribution aléatoire de 600 plats et 1 200 boissons
-        avec la liste de courses complète.
+        Génère 8 plats aléatoires et 2 desserts avec la liste de courses complète.
       </p>
       <button @click="generate" class="btn-primary mt-8 text-base px-8 py-3">
         🎲 Générer le menu
@@ -141,13 +174,32 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { recipes, getIngredientPrice } from '../data.js'
+import { recipes, getIngredientPrice, fishIngredients } from '../data.js'
 
-// ── Constantes ──────────────────────────────────────────────────────────────
-const TOTAL_PLATS = 600
-const TOTAL_BOISSONS = 1200
-const MAX_PER_PLAT = 100
-const MAX_PER_BOISSON = 600
+// ── Catégories ───────────────────────────────────────────────────────────────
+const DESSERT_NAMES = new Set([
+  'Cookies',
+  'Crepe',
+  'Dango Fruite',
+  "Donut's fraise",
+  'Fleur aux pommes',
+  'Fondant chocolat',
+  "Gateau d'anniversaire",
+  "Gateau de semoule a l'orange",
+  'Gauffre Nature',
+  'Gauffre au sucre',
+  '3x Macarons',
+  'Mochi Fraise-Chocolat',
+  'Mousse au Chocolat',
+  'Muffins au chocolat',
+  'Pain perdu',
+  'Riz au lait',
+  'Salade de fruit',
+  'Tarte au pomme',
+  'Tartelette citron',
+  'Tartelette fraise',
+  'Tartine de confiture de fraise',
+])
 
 const DRINK_NAMES = new Set([
   'Chocolat Chaud',
@@ -157,104 +209,68 @@ const DRINK_NAMES = new Set([
   '3x Smoothie aux fruits',
 ])
 
-const platRecipes = recipes.filter(r => !DRINK_NAMES.has(r.name))
-const boissonRecipes = recipes.filter(r => DRINK_NAMES.has(r.name))
+const platRecipes = recipes.filter(r => !DESSERT_NAMES.has(r.name) && !DRINK_NAMES.has(r.name))
+const dessertRecipes = recipes.filter(r => DESSERT_NAMES.has(r.name))
 
 // ── État ─────────────────────────────────────────────────────────────────────
-const platCounts = ref(new Map())
-const boissonCounts = ref(new Map())
+const selectedPlats = ref([])
+const selectedDesserts = ref([])
 const generated = ref(false)
 const loading = ref(false)
 
-// ── Algorithme de distribution ───────────────────────────────────────────────
-// Distribue `total` unités parmi `recipeList` avec un max de `maxPerRecipe`
-// Garantit que la somme est EXACTEMENT égale à `total`.
-function distribute(recipeList, total, maxPerRecipe) {
-  const n = recipeList.length
-
-  // Pondération aléatoire (distribution gamma-like via -log(U))
-  const weights = Array.from({ length: n }, () => -Math.log(Math.random() + 1e-10))
-  const sumW = weights.reduce((a, b) => a + b, 0)
-
-  // Allocation initiale proportionnelle, plafonnée
-  const counts = weights.map(w => Math.min(maxPerRecipe, Math.round((w / sumW) * total)))
-
-  // Ajustement pour atteindre exactement `total`
-  let delta = total - counts.reduce((a, b) => a + b, 0)
-  let guard = 0
-
-  while (delta !== 0 && guard < 50_000) {
-    guard++
-    const i = Math.floor(Math.random() * n)
-    if (delta > 0 && counts[i] < maxPerRecipe) {
-      counts[i]++
-      delta--
-    } else if (delta < 0 && counts[i] > 0) {
-      counts[i]--
-      delta++
-    }
+// ── Génération ───────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
   }
-
-  const result = new Map()
-  recipeList.forEach((r, i) => result.set(r.name, counts[i]))
-  return result
+  return a
 }
 
-// ── Génération ───────────────────────────────────────────────────────────────
 async function generate() {
   loading.value = true
-  // Micro-délai pour que le spinner s'affiche avant le calcul synchrone
-  await new Promise(r => setTimeout(r, 250))
-  platCounts.value = distribute(platRecipes, TOTAL_PLATS, MAX_PER_PLAT)
-  boissonCounts.value = distribute(boissonRecipes, TOTAL_BOISSONS, MAX_PER_BOISSON)
+  await new Promise(r => setTimeout(r, 150))
+  selectedPlats.value = shuffle(platRecipes).slice(0, 8)
+  selectedDesserts.value = shuffle(dessertRecipes).slice(0, 2)
   generated.value = true
   loading.value = false
 }
 
-// ── Computed ─────────────────────────────────────────────────────────────────
-const sortedPlats = computed(() =>
-  [...platCounts.value.entries()]
-    .filter(([, qty]) => qty > 0)
-    .sort((a, b) => b[1] - a[1])
-)
-
-const sortedBoissons = computed(() =>
-  [...boissonCounts.value.entries()].sort((a, b) => b[1] - a[1])
-)
-
-const activePlatCount = computed(() =>
-  [...platCounts.value.values()].filter(q => q > 0).length
-)
-
-const shoppingList = computed(() => {
+// ── Liste de courses ──────────────────────────────────────────────────────────
+const allIngredients = computed(() => {
   const map = new Map()
 
   const addIngredients = (recipe, qty) => {
     for (const ingName of recipe.ingredients) {
       const unitPrice = getIngredientPrice(ingName)
+      const isFish = fishIngredients.has(ingName)
       if (map.has(ingName)) {
         const e = map.get(ingName)
         e.count += qty
-        e.total += unitPrice * qty
+        if (!isFish) e.total += unitPrice * qty
       } else {
-        map.set(ingName, { name: ingName, count: qty, unitPrice, total: unitPrice * qty })
+        map.set(ingName, {
+          name: ingName,
+          count: qty,
+          unitPrice,
+          total: isFish ? 0 : unitPrice * qty,
+          isFish,
+        })
       }
     }
   }
 
-  for (const recipe of platRecipes) {
-    const qty = platCounts.value.get(recipe.name) ?? 0
-    if (qty > 0) addIngredients(recipe, qty)
-  }
-  for (const recipe of boissonRecipes) {
-    const qty = boissonCounts.value.get(recipe.name) ?? 0
-    if (qty > 0) addIngredients(recipe, qty)
-  }
+  for (const recipe of selectedPlats.value) addIngredients(recipe, 60)
+  for (const recipe of selectedDesserts.value) addIngredients(recipe, 40)
 
   return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
 })
 
+const toBuyList = computed(() => allIngredients.value.filter(i => !i.isFish))
+const toFishList = computed(() => allIngredients.value.filter(i => i.isFish))
+
 const grandTotal = computed(() =>
-  shoppingList.value.reduce((s, i) => s + i.total, 0)
+  toBuyList.value.reduce((s, i) => s + i.total, 0)
 )
 </script>

@@ -76,10 +76,12 @@
             v-for="ing in recipe.ingredients"
             :key="ing"
             @click.stop="filterIngredient = ing"
-            class="text-xs bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full hover:bg-teal-200 transition-colors"
-            :title="`Filtrer par ${ing}`"
+            :class="fishIngredients.has(ing)
+              ? 'text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full hover:bg-blue-100 transition-colors'
+              : 'text-xs bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full hover:bg-teal-200 transition-colors'"
+            :title="fishIngredients.has(ing) ? `${ing} (pêche — gratuit)` : `Filtrer par ${ing}`"
           >
-            {{ ing }}
+            <span v-if="fishIngredients.has(ing)">🎣 </span>{{ ing }}
           </button>
         </div>
 
@@ -107,7 +109,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { recipes, priceBadgeClass } from '../data.js'
+import { recipes, priceBadgeClass, fishIngredients } from '../data.js'
 import RecipeModal from '../components/RecipeModal.vue'
 
 const search = ref('')
