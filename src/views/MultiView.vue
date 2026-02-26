@@ -13,7 +13,7 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="text-sm text-stone-500">
-            <span class="font-bold text-amber-700">{{ selected.length }}</span>/{{ MAX_SELECT }} recettes
+            <span class="font-bold text-teal-700">{{ selected.length }}</span>/{{ MAX_SELECT }} recettes
           </span>
           <button
             v-if="selected.length"
@@ -30,7 +30,7 @@
         <div
           v-for="item in selected"
           :key="item.recipe.name"
-          class="card border border-amber-200 p-4"
+          class="card border border-teal-200 p-4"
         >
           <!-- Name + remove -->
           <div class="flex items-start justify-between gap-2 mb-3">
@@ -51,10 +51,10 @@
                 @click="changeQty(item, -1)"
                 class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold text-base transition-colors flex items-center justify-center leading-none"
               >−</button>
-              <span class="font-bold text-amber-700 w-7 text-center tabular-nums">{{ item.qty }}</span>
+              <span class="font-bold text-teal-700 w-7 text-center tabular-nums">{{ item.qty }}</span>
               <button
                 @click="changeQty(item, +1)"
-                class="w-7 h-7 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-700 font-bold text-base transition-colors flex items-center justify-center leading-none"
+                class="w-7 h-7 rounded-full bg-teal-100 hover:bg-teal-200 text-teal-700 font-bold text-base transition-colors flex items-center justify-center leading-none"
               >+</button>
             </div>
           </div>
@@ -80,7 +80,7 @@
       <!-- Empty state -->
       <div
         v-else
-        class="border-2 border-dashed border-amber-200 rounded-xl p-12 text-center text-stone-400 mb-5"
+        class="border-2 border-dashed border-teal-200 rounded-xl p-12 text-center text-stone-400 mb-5"
       >
         <div class="text-5xl mb-3">📋</div>
         <p class="font-medium">Aucune recette sélectionnée</p>
@@ -109,7 +109,7 @@
             :class="[
               'text-left p-3 rounded-xl border-2 transition-all duration-150',
               isSelected(recipe)
-                ? 'bg-amber-50 border-amber-400 shadow-sm'
+                ? 'bg-teal-50 border-teal-400 shadow-sm'
                 : 'bg-stone-50 border-transparent hover:border-stone-200',
               !isSelected(recipe) && selected.length >= MAX_SELECT
                 ? 'opacity-40 cursor-not-allowed'
@@ -118,16 +118,16 @@
           >
             <div
               class="font-medium leading-tight mb-1 text-xs"
-              :class="isSelected(recipe) ? 'text-amber-800' : 'text-stone-700'"
+              :class="isSelected(recipe) ? 'text-teal-800' : 'text-stone-700'"
             >
               {{ recipe.name }}
             </div>
             <div class="flex items-center justify-between">
               <span
                 class="text-xs"
-                :class="isSelected(recipe) ? 'text-amber-600' : 'text-stone-400'"
+                :class="isSelected(recipe) ? 'text-teal-600' : 'text-stone-400'"
               >{{ recipe.price }}€</span>
-              <span v-if="isSelected(recipe)" class="text-amber-500 text-xs font-bold">✓</span>
+              <span v-if="isSelected(recipe)" class="text-teal-500 text-xs font-bold">✓</span>
             </div>
           </button>
         </div>

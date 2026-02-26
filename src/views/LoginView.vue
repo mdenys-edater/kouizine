@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-amber-900 via-amber-700 to-amber-500 flex items-center justify-center p-4">
+  <div class="min-h-screen bg-gradient-to-br from-teal-900 via-teal-700 to-emerald-500 flex items-center justify-center p-4">
     <!-- Card -->
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
       <!-- Header -->
-      <div class="bg-gradient-to-br from-amber-800 to-amber-600 px-8 py-8 text-center">
-        <div class="text-5xl mb-3 select-none">👨‍🍳</div>
+      <div class="bg-gradient-to-br from-teal-800 to-emerald-600 px-8 py-8 text-center">
+        <div class="text-5xl mb-3 select-none">🫕☠️</div>
         <h1 class="text-2xl font-bold text-white tracking-tight">Echo - Kouizine</h1>
-        <p class="text-amber-200 text-sm mt-1">Livre de recettes</p>
-        <p class="text-amber-200 text-sm mt-1">(Peut aussi servir à empoisonner Billy)</p>
+        <p class="text-teal-200 text-sm mt-1">Livre de recettes</p>
+        <p class="text-teal-200 text-sm mt-1">(Peut aussi servir à empoisonner Billy)</p>
       </div>
 
       <!-- Form -->

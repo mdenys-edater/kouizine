@@ -3,14 +3,14 @@
     <!-- Header (masqué sur la page de login) -->
     <header
       v-if="isAuthenticated"
-      class="no-print bg-gradient-to-r from-amber-900 via-amber-700 to-amber-600 text-white shadow-lg sticky top-0 z-40"
+      class="no-print bg-gradient-to-r from-teal-900 via-teal-700 to-emerald-600 text-white shadow-lg sticky top-0 z-40"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <span class="text-3xl select-none">👨‍🍳</span>
+          <span class="text-3xl select-none">🫕☠️</span>
           <div>
             <h1 class="text-xl font-bold tracking-tight leading-none">Kouizine</h1>
-            <p class="text-amber-200 text-xs mt-0.5">Livre de recettes (Peut aussi servir à empoisonner Billy)</p>
+            <p class="text-teal-200 text-xs mt-0.5">Livre de recettes (Peut aussi servir à empoisonner Billy)</p>
           </div>
         </div>
 
@@ -19,7 +19,7 @@
             v-for="link in navLinks"
             :key="link.to"
             :to="link.to"
-            class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-amber-100 hover:bg-white/10 hover:text-white transition-all duration-150"
+            class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-teal-100 hover:bg-white/10 hover:text-white transition-all duration-150"
             active-class="!bg-white/20 !text-white"
           >
             <span>{{ link.icon }}</span>
@@ -30,7 +30,7 @@
         <!-- Logout -->
         <button
           @click="handleLogout"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-amber-200 hover:bg-white/10 hover:text-white transition-all duration-150"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-teal-200 hover:bg-white/10 hover:text-white transition-all duration-150"
           title="Se déconnecter"
         >
           <span>🚪</span>

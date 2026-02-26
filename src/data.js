@@ -126,7 +126,7 @@ export function getIngredientPrice(name) {
 
 export function priceBadgeClass(price) {
   if (price <= 15) return 'badge-green'
-  if (price <= 25) return 'badge-amber'
-  if (price <= 35) return 'badge-orange'
+  if (price <= 25) return 'badge-teal'
+  if (price <= 35) return 'badge-blue'
   return 'badge-red'
 }

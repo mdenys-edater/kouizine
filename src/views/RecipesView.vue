@@ -3,7 +3,7 @@
     <!-- Stats row -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
       <div class="stat-card">
-        <div class="text-2xl font-bold text-amber-700">{{ recipes.length }}</div>
+        <div class="text-2xl font-bold text-teal-700">{{ recipes.length }}</div>
         <div class="text-xs text-stone-500 mt-0.5">recettes</div>
       </div>
       <div class="stat-card">
@@ -11,11 +11,11 @@
         <div class="text-xs text-stone-500 mt-0.5">moins chère</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-amber-700">{{ avgPrice }}€</div>
+        <div class="text-2xl font-bold text-teal-700">{{ avgPrice }}€</div>
         <div class="text-xs text-stone-500 mt-0.5">prix moyen</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-orange-600">{{ maxPrice }}€</div>
+        <div class="text-2xl font-bold text-teal-600">{{ maxPrice }}€</div>
         <div class="text-xs text-stone-500 mt-0.5">plus chère</div>
       </div>
     </div>
@@ -58,11 +58,11 @@
         v-for="recipe in filteredRecipes"
         :key="recipe.name"
         @click="selectedRecipe = recipe"
-        class="card p-4 cursor-pointer hover:shadow-md hover:border-amber-300 border border-transparent transition-all duration-150 group"
+        class="card p-4 cursor-pointer hover:shadow-md hover:border-teal-300 border border-transparent transition-all duration-150 group"
       >
         <!-- Name + price -->
         <div class="flex items-start justify-between gap-2 mb-3">
-          <h3 class="font-semibold text-stone-800 group-hover:text-amber-700 transition-colors leading-snug text-sm">
+          <h3 class="font-semibold text-stone-800 group-hover:text-teal-700 transition-colors leading-snug text-sm">
             {{ recipe.name }}
           </h3>
           <span :class="priceBadgeClass(recipe.price)" class="shrink-0 text-sm font-bold px-2.5 py-1 rounded-full">
@@ -76,7 +76,7 @@
             v-for="ing in recipe.ingredients"
             :key="ing"
             @click.stop="filterIngredient = ing"
-            class="text-xs bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full hover:bg-amber-200 transition-colors"
+            class="text-xs bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full hover:bg-teal-200 transition-colors"
             :title="`Filtrer par ${ing}`"
           >
             {{ ing }}
@@ -86,7 +86,7 @@
         <!-- Footer -->
         <div class="mt-3 flex items-center justify-between text-xs text-stone-400">
           <span>{{ recipe.ingredients.length }} ingrédient{{ recipe.ingredients.length > 1 ? 's' : '' }}</span>
-          <span class="text-amber-500 group-hover:text-amber-700 transition-colors">Voir →</span>
+          <span class="text-teal-500 group-hover:text-teal-700 transition-colors">Voir →</span>
         </div>
       </div>
     </div>
@@ -95,7 +95,7 @@
     <div v-else class="flex flex-col items-center justify-center py-20 text-stone-400">
       <span class="text-6xl mb-4">🍽️</span>
       <p class="text-lg font-medium">Aucune recette trouvée</p>
-      <button @click="search = ''; filterIngredient = ''" class="mt-3 text-amber-600 hover:underline text-sm">
+      <button @click="search = ''; filterIngredient = ''" class="mt-3 text-teal-600 hover:underline text-sm">
         Réinitialiser les filtres
       </button>
     </div>

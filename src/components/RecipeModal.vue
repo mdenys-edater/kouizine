@@ -11,15 +11,15 @@
       <!-- Card -->
       <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
         <!-- Header -->
-        <div class="bg-gradient-to-br from-amber-700 to-amber-500 text-white p-6 pb-5">
+        <div class="bg-gradient-to-br from-teal-700 to-emerald-500 text-white p-6 pb-5">
           <button
             @click="emit('close')"
-            class="absolute top-4 right-4 text-amber-200 hover:text-white transition-colors text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20"
+            class="absolute top-4 right-4 text-teal-200 hover:text-white transition-colors text-xl w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20"
           >
             ✕
           </button>
           <h2 class="text-xl font-bold leading-tight pr-8">{{ recipe.name }}</h2>
-          <p class="text-amber-200 text-sm mt-1">
+          <p class="text-teal-200 text-sm mt-1">
             {{ recipe.ingredients.length }} ingrédient{{ recipe.ingredients.length > 1 ? 's' : '' }}
           </p>
         </div>
@@ -34,7 +34,7 @@
               class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0"
             >
               <div class="flex items-center gap-2">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                <span class="w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0" />
                 <span class="text-stone-700 text-sm">{{ ing.name }}</span>
               </div>
               <span class="text-stone-400 text-sm font-medium">{{ ing.price }}€</span>
