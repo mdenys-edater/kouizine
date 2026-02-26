@@ -1,0 +1,58 @@
+<template>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="no-print bg-gradient-to-r from-amber-900 via-amber-700 to-amber-600 text-white shadow-lg sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl select-none">👨‍🍳</span>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight leading-none">Kouizine</h1>
+            <p class="text-amber-200 text-xs mt-0.5">Livre de recettes</p>
+          </div>
+        </div>
+        <nav class="flex items-center gap-1">
+          <RouterLink
+            v-for="link in navLinks"
+            :key="link.to"
+            :to="link.to"
+            class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-amber-100 hover:bg-white/10 hover:text-white transition-all duration-150"
+            active-class="!bg-white/20 !text-white"
+          >
+            <span>{{ link.icon }}</span>
+            <span class="hidden sm:inline">{{ link.label }}</span>
+          </RouterLink>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <RouterView v-slot="{ Component }">
+        <Transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </Transition>
+      </RouterView>
+    </main>
+  </div>
+</template>
+
+<script setup>
+import { RouterView, RouterLink } from 'vue-router'
+
+const navLinks = [
+  { to: '/recettes', icon: '📋', label: 'Recettes' },
+  { to: '/menu', icon: '📑', label: 'Menu' },
+  { to: '/ingredients', icon: '🥬', label: 'Ingrédients' },
+]
+</script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
