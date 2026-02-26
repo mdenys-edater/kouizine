@@ -1,7 +1,10 @@
 <template>
   <div class="min-h-screen">
-    <!-- Header -->
-    <header class="no-print bg-gradient-to-r from-amber-900 via-amber-700 to-amber-600 text-white shadow-lg sticky top-0 z-40">
+    <!-- Header (masqué sur la page de login) -->
+    <header
+      v-if="isAuthenticated"
+      class="no-print bg-gradient-to-r from-amber-900 via-amber-700 to-amber-600 text-white shadow-lg sticky top-0 z-40"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
         <div class="flex items-center gap-3">
           <span class="text-3xl select-none">👨‍🍳</span>
@@ -10,6 +13,7 @@
             <p class="text-amber-200 text-xs mt-0.5">Livre de recettes</p>
           </div>
         </div>
+
         <nav class="flex items-center gap-1">
           <RouterLink
             v-for="link in navLinks"
@@ -22,11 +26,21 @@
             <span class="hidden sm:inline">{{ link.label }}</span>
           </RouterLink>
         </nav>
+
+        <!-- Logout -->
+        <button
+          @click="handleLogout"
+          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-amber-200 hover:bg-white/10 hover:text-white transition-all duration-150"
+          title="Se déconnecter"
+        >
+          <span>🚪</span>
+          <span class="hidden sm:inline">Déconnexion</span>
+        </button>
       </div>
     </header>
 
     <!-- Main content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+    <main :class="isAuthenticated ? 'max-w-7xl mx-auto px-4 sm:px-6 py-6' : ''">
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -37,13 +51,21 @@
 </template>
 
 <script setup>
-import { RouterView, RouterLink } from 'vue-router'
+import { RouterView, RouterLink, useRouter } from 'vue-router'
+import { isAuthenticated, logout } from './auth.js'
+
+const router = useRouter()
 
 const navLinks = [
   { to: '/recettes', icon: '📋', label: 'Recettes' },
   { to: '/menu', icon: '📑', label: 'Menu' },
   { to: '/ingredients', icon: '🥬', label: 'Ingrédients' },
 ]
+
+function handleLogout() {
+  logout()
+  router.push('/login')
+}
 </script>
 
 <style>
