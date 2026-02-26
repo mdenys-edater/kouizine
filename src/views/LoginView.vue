@@ -5,8 +5,9 @@
       <!-- Header -->
       <div class="bg-gradient-to-br from-amber-800 to-amber-600 px-8 py-8 text-center">
         <div class="text-5xl mb-3 select-none">👨‍🍳</div>
-        <h1 class="text-2xl font-bold text-white tracking-tight">Kouizine</h1>
+        <h1 class="text-2xl font-bold text-white tracking-tight">Echo - Kouizine</h1>
         <p class="text-amber-200 text-sm mt-1">Livre de recettes</p>
+        <p class="text-amber-200 text-sm mt-1">(Peut aussi servir à empoisonner Billy)</p>
       </div>
 
       <!-- Form -->

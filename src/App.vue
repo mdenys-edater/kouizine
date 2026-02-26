@@ -10,7 +10,7 @@
           <span class="text-3xl select-none">👨‍🍳</span>
           <div>
             <h1 class="text-xl font-bold tracking-tight leading-none">Kouizine</h1>
-            <p class="text-amber-200 text-xs mt-0.5">Livre de recettes</p>
+            <p class="text-amber-200 text-xs mt-0.5">Livre de recettes (Peut aussi servir à empoisonner Billy)</p>
           </div>
         </div>
 
