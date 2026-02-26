@@ -60,6 +60,7 @@ const navLinks = [
   { to: '/recettes', icon: '📋', label: 'Recettes' },
   { to: '/menu', icon: '📑', label: 'Menu' },
   { to: '/ingredients', icon: '🥬', label: 'Ingrédients' },
+  { to: '/hello-fresh', icon: '🥗', label: 'Hello Fresh' },
 ]
 
 function handleLogout() {
