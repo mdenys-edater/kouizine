@@ -32,6 +32,14 @@
         <option value="">Tous les ingrédients</option>
         <option v-for="name in allIngredientNames" :key="name" :value="name">{{ name }}</option>
       </select>
+      <select :value="''" @change="addExclusion($event.target.value); $event.target.value = ''" class="select">
+        <option value="" disabled>− Exclure un ingrédient…</option>
+        <option
+          v-for="name in excludableIngredients"
+          :key="name"
+          :value="name"
+        >{{ name }}</option>
+      </select>
       <select v-model="sortBy" class="select">
         <option value="name">Trier par nom</option>
         <option value="price_asc">Prix croissant</option>
@@ -40,11 +48,26 @@
       <div class="flex items-center gap-2 ml-auto">
         <span class="text-stone-400 text-sm">{{ filteredRecipes.length }} résultat{{ filteredRecipes.length > 1 ? 's' : '' }}</span>
         <button
-          v-if="search || filterIngredient"
-          @click="search = ''; filterIngredient = ''"
+          v-if="search || filterIngredient || excluded.length"
+          @click="search = ''; filterIngredient = ''; excluded = []"
           class="btn-ghost text-xs py-1 px-2"
         >
           Effacer
+        </button>
+      </div>
+
+      <!-- Exclusion chips -->
+      <div v-if="excluded.length" class="w-full flex flex-wrap gap-1.5 pt-1 border-t border-stone-100">
+        <span class="text-xs text-stone-400 self-center mr-1">Exclus :</span>
+        <button
+          v-for="ing in excluded"
+          :key="ing"
+          @click="removeExclusion(ing)"
+          class="flex items-center gap-1 text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full hover:bg-red-100 transition-colors"
+          title="Retirer l'exclusion"
+        >
+          <span>− {{ ing }}</span>
+          <span class="text-red-400 font-bold leading-none">✕</span>
         </button>
       </div>
     </div>
@@ -97,7 +120,10 @@
     <div v-else class="flex flex-col items-center justify-center py-20 text-stone-400">
       <span class="text-6xl mb-4">🍽️</span>
       <p class="text-lg font-medium">Aucune recette trouvée</p>
-      <button @click="search = ''; filterIngredient = ''" class="mt-3 text-teal-600 hover:underline text-sm">
+      <button
+        @click="search = ''; filterIngredient = ''; excluded = []"
+        class="mt-3 text-teal-600 hover:underline text-sm"
+      >
         Réinitialiser les filtres
       </button>
     </div>
@@ -116,6 +142,7 @@ const search = ref('')
 const filterIngredient = ref('')
 const sortBy = ref('name')
 const selectedRecipe = ref(null)
+const excluded = ref([])
 
 const minPrice = computed(() => Math.min(...recipes.map(r => r.price)))
 const maxPrice = computed(() => Math.max(...recipes.map(r => r.price)))
@@ -126,6 +153,20 @@ const allIngredientNames = computed(() => {
   recipes.forEach(r => r.ingredients.forEach(i => names.add(i)))
   return [...names].sort((a, b) => a.localeCompare(b, 'fr'))
 })
+
+const excludableIngredients = computed(() =>
+  allIngredientNames.value.filter(n => !excluded.value.includes(n))
+)
+
+function addExclusion(ing) {
+  if (ing && !excluded.value.includes(ing)) {
+    excluded.value = [...excluded.value, ing]
+  }
+}
+
+function removeExclusion(ing) {
+  excluded.value = excluded.value.filter(i => i !== ing)
+}
 
 const filteredRecipes = computed(() => {
   let result = recipes
@@ -141,6 +182,10 @@ const filteredRecipes = computed(() => {
 
   if (filterIngredient.value) {
     result = result.filter(r => r.ingredients.includes(filterIngredient.value))
+  }
+
+  if (excluded.value.length) {
+    result = result.filter(r => !r.ingredients.some(i => excluded.value.includes(i)))
   }
 
   return result.slice().sort((a, b) => {
