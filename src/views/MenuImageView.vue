@@ -71,9 +71,6 @@
             ]"
           >
             <span class="truncate">{{ r.name }}</span>
-            <span class="shrink-0 text-xs" :class="isSelected(r) ? 'text-teal-500 font-bold' : 'text-stone-300 dark:text-stone-600'">
-              {{ isSelected(r) ? '✓' : r.price + '€' }}
-            </span>
           </button>
         </div>
 
@@ -264,7 +261,7 @@ function drawMenu() {
   ctx.font = 'bold 46px Georgia, "Times New Roman", serif'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('MENU DE LA SEMAINE', cx, 72)
+  ctx.fillText('Echo Fresh', cx, 72)
 
   const lineY = 118
   ctx.strokeStyle = 'rgba(45,212,191,0.4)'
