@@ -10,6 +10,7 @@ import MultiView from './views/MultiView.vue'
 import IngredientsView from './views/IngredientsView.vue'
 import HelloFreshView from './views/HelloFreshView.vue'
 import EchoFrigoView from './views/EchoFrigoView.vue'
+import MenuImageView from './views/MenuImageView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -21,6 +22,7 @@ const router = createRouter({
     { path: '/ingredients', component: IngredientsView },
     { path: '/hello-fresh', component: HelloFreshView },
     { path: '/echo-frigo', component: EchoFrigoView },
+    { path: '/menu-image', component: MenuImageView },
   ],
 })
 

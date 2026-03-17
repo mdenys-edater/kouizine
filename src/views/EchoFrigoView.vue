@@ -2,8 +2,8 @@
   <div>
     <!-- Header -->
     <div class="mb-6">
-      <h2 class="text-xl font-bold text-stone-800">🧊 Echo-frigo</h2>
-      <p class="text-stone-500 text-sm mt-1">
+      <h2 class="text-xl font-bold text-stone-800 dark:text-stone-100">🧊 Echo-frigo</h2>
+      <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">
         Sélectionnez ce que vous avez pour découvrir les recettes réalisables
       </p>
     </div>
@@ -13,7 +13,7 @@
       <!-- ── Frigo (sticky) ── -->
       <div class="lg:sticky lg:top-20 card p-4">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold text-stone-700">🧊 Mon frigo</h3>
+          <h3 class="font-semibold text-stone-700 dark:text-stone-200">🧊 Mon frigo</h3>
           <button
             v-if="fridge.size"
             @click="clearFridge"
@@ -38,8 +38,8 @@
             :class="[
               'w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2',
               fridge.has(ing.name)
-                ? 'bg-teal-50 text-teal-800 font-medium'
-                : 'hover:bg-stone-50 text-stone-600',
+                ? 'bg-teal-50 dark:bg-teal-900/40 text-teal-800 dark:text-teal-200 font-medium'
+                : 'hover:bg-stone-50 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300',
             ]"
           >
             <span class="w-4 text-center text-teal-500">{{ fridge.has(ing.name) ? '✓' : '' }}</span>
@@ -47,7 +47,7 @@
           </button>
         </div>
 
-        <div v-if="fridge.size" class="mt-3 pt-3 border-t border-stone-100 text-xs text-stone-400">
+        <div v-if="fridge.size" class="mt-3 pt-3 border-t border-stone-100 dark:border-stone-700 text-xs text-stone-400">
           {{ fridge.size }} ingrédient{{ fridge.size > 1 ? 's' : '' }} sélectionné{{ fridge.size > 1 ? 's' : '' }}
         </div>
       </div>
@@ -71,7 +71,7 @@
         <!-- Empty state : frigo vide -->
         <div v-if="!fridge.size" class="flex flex-col items-center justify-center py-24 text-stone-400">
           <div class="text-7xl mb-5 select-none">🧊</div>
-          <p class="text-lg font-semibold text-stone-600">Frigo vide</p>
+          <p class="text-lg font-semibold text-stone-600 dark:text-stone-300">Frigo vide</p>
           <p class="text-sm mt-2 text-center max-w-sm leading-relaxed">
             Sélectionnez les ingrédients que vous avez pour voir les recettes disponibles.
           </p>
@@ -80,7 +80,7 @@
         <!-- Empty state : aucun résultat pour ce filtre -->
         <div v-else-if="filteredRecipes.length === 0" class="flex flex-col items-center justify-center py-24 text-stone-400">
           <div class="text-7xl mb-5 select-none">🤷</div>
-          <p class="text-lg font-semibold text-stone-600">Aucune recette</p>
+          <p class="text-lg font-semibold text-stone-600 dark:text-stone-300">Aucune recette</p>
           <p class="text-sm mt-2">Essayez un autre filtre ou ajoutez des ingrédients.</p>
         </div>
 
@@ -93,13 +93,13 @@
           >
             <!-- Nom + compteur -->
             <div class="flex items-start justify-between gap-2">
-              <h4 class="font-semibold text-stone-800 text-sm leading-tight">{{ item.recipe.name }}</h4>
+              <h4 class="font-semibold text-stone-800 dark:text-stone-100 text-sm leading-tight">{{ item.recipe.name }}</h4>
               <span
                 :class="[
                   'badge shrink-0 font-semibold',
                   item.missing.length === 0
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-amber-100 text-amber-700',
+                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300'
+                    : 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
                 ]"
               >
                 {{ item.have }}/{{ item.total }}
@@ -114,15 +114,15 @@
                 :class="[
                   'badge text-xs',
                   fridge.has(ing)
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'bg-red-50 text-red-500 line-through',
+                    ? 'bg-teal-50 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300'
+                    : 'bg-red-50 text-red-500 line-through dark:bg-red-900/30 dark:text-red-400',
                 ]"
               >{{ ing }}</span>
             </div>
 
             <!-- Pied de carte -->
-            <div class="pt-2 border-t border-stone-100 mt-auto">
-              <div v-if="item.missing.length === 0" class="text-xs text-emerald-600 font-medium">
+            <div class="pt-2 border-t border-stone-100 dark:border-stone-700 mt-auto">
+              <div v-if="item.missing.length === 0" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
                 ✓ Tout disponible !
               </div>
               <div v-else>
@@ -131,12 +131,12 @@
                   <span
                     v-for="m in item.missing"
                     :key="m.name"
-                    class="text-xs bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full"
+                    class="text-xs bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 px-2 py-0.5 rounded-full"
                   >
                     {{ m.name }}&nbsp;<span class="text-stone-400">{{ m.price }}€</span>
                   </span>
                 </div>
-                <p class="text-right text-xs font-semibold text-amber-600 mt-1.5">
+                <p class="text-right text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1.5">
                   +{{ item.missingCost }}€ manquant
                 </p>
               </div>
@@ -221,6 +221,6 @@ const filteredRecipes = computed(() => {
 function tabClass(f) {
   return filter.value === f
     ? 'btn-primary text-sm px-3 py-1.5'
-    : 'text-sm px-3 py-1.5 rounded-lg border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors'
+    : 'text-sm px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors'
 }
 </script>

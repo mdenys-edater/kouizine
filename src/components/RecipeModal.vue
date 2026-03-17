@@ -9,7 +9,7 @@
       <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="emit('close')" />
 
       <!-- Card -->
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+      <div class="relative bg-white dark:bg-stone-900 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
         <!-- Header -->
         <div class="bg-gradient-to-br from-teal-700 to-emerald-500 text-white p-6 pb-5">
           <button
@@ -32,13 +32,13 @@
             <div
               v-for="(ing, idx) in ingredientDetails"
               :key="`${ing.name}-${idx}`"
-              class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0"
+              class="flex items-center justify-between py-2 border-b border-stone-50 dark:border-stone-800 last:border-0"
             >
               <div class="flex items-center gap-2">
                 <span
                   :class="ing.isFish ? 'w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0' : 'w-1.5 h-1.5 rounded-full bg-teal-400 shrink-0'"
                 />
-                <span class="text-stone-700 text-sm">{{ ing.name }}</span>
+                <span class="text-stone-700 dark:text-stone-200 text-sm">{{ ing.name }}</span>
               </div>
               <span v-if="ing.isFish" class="text-blue-500 text-xs font-medium flex items-center gap-1">
                 🎣 Pêche
@@ -48,20 +48,20 @@
           </div>
 
           <!-- Total -->
-          <div class="mt-5 pt-4 border-t-2 border-stone-100">
+          <div class="mt-5 pt-4 border-t-2 border-stone-100 dark:border-stone-700">
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-xs text-stone-400 font-medium">Prix de vente</p>
-                <p class="text-stone-600 text-xs mt-0.5">Affiché au menu</p>
+                <p class="text-stone-600 dark:text-stone-300 text-xs mt-0.5">Affiché au menu</p>
               </div>
-              <span class="text-3xl font-bold text-emerald-600">{{ recipe.price }}€</span>
+              <span class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{{ recipe.price }}€</span>
             </div>
             <div v-if="fishCount > 0" class="flex items-center justify-between mt-2">
               <div>
                 <p class="text-xs text-stone-400 font-medium">Coût achats</p>
                 <p class="text-blue-500 text-xs mt-0.5">🎣 {{ fishCount }} ingrédient{{ fishCount > 1 ? 's' : '' }} gratuit{{ fishCount > 1 ? 's' : '' }}</p>
               </div>
-              <span class="text-xl font-bold text-stone-600">{{ purchaseCost }}€</span>
+              <span class="text-xl font-bold text-stone-600 dark:text-stone-300">{{ purchaseCost }}€</span>
             </div>
           </div>
         </div>

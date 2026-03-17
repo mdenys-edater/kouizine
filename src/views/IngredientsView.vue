@@ -3,16 +3,16 @@
     <!-- Stats -->
     <div class="grid grid-cols-3 gap-3 mb-6">
       <div class="stat-card">
-        <div class="text-2xl font-bold text-teal-700">{{ ingredients.length }}</div>
-        <div class="text-xs text-stone-500 mt-0.5">ingrédients</div>
+        <div class="text-2xl font-bold text-teal-700 dark:text-teal-400">{{ ingredients.length }}</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">ingrédients</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-emerald-600">{{ minPrice }}€</div>
-        <div class="text-xs text-stone-500 mt-0.5">moins cher</div>
+        <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ minPrice }}€</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">moins cher</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-teal-600">{{ maxPrice }}€</div>
-        <div class="text-xs text-stone-500 mt-0.5">plus cher</div>
+        <div class="text-2xl font-bold text-teal-600 dark:text-teal-400">{{ maxPrice }}€</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">plus cher</div>
       </div>
     </div>
 
@@ -40,11 +40,11 @@
       <div
         v-for="ing in filtered"
         :key="ing.name"
-        class="card p-4 hover:shadow-md hover:border-teal-200 border border-transparent transition-all duration-150"
+        class="card p-4 hover:shadow-md hover:border-teal-200 dark:hover:border-teal-700 border border-transparent transition-all duration-150"
       >
-        <div class="font-medium text-stone-700 text-sm leading-tight mb-3">{{ ing.name }}</div>
+        <div class="font-medium text-stone-700 dark:text-stone-200 text-sm leading-tight mb-3">{{ ing.name }}</div>
         <div class="flex items-end justify-between">
-          <span class="text-2xl font-bold text-teal-700">{{ ing.price }}€</span>
+          <span class="text-2xl font-bold text-teal-700 dark:text-teal-400">{{ ing.price }}€</span>
           <span
             class="text-xs text-stone-400 text-right leading-tight"
             :title="`Utilisé dans ${recipeCount(ing.name)} recette(s)`"

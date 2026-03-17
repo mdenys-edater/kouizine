@@ -27,15 +27,25 @@
           </RouterLink>
         </nav>
 
-        <!-- Logout -->
-        <button
-          @click="handleLogout"
-          class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-teal-200 hover:bg-white/10 hover:text-white transition-all duration-150"
-          title="Se déconnecter"
-        >
-          <span>🚪</span>
-          <span class="hidden sm:inline">Déconnexion</span>
-        </button>
+        <div class="flex items-center gap-1">
+          <!-- Dark mode toggle -->
+          <button
+            @click="toggleDark"
+            class="px-3 py-2 rounded-lg text-teal-200 hover:bg-white/10 hover:text-white transition-all duration-150 text-base"
+            :title="isDark ? 'Mode clair' : 'Mode sombre'"
+          >
+            {{ isDark ? '☀️' : '🌙' }}
+          </button>
+          <!-- Logout -->
+          <button
+            @click="handleLogout"
+            class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-teal-200 hover:bg-white/10 hover:text-white transition-all duration-150"
+            title="Se déconnecter"
+          >
+            <span>🚪</span>
+            <span class="hidden sm:inline">Déconnexion</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -51,10 +61,28 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { RouterView, RouterLink, useRouter } from 'vue-router'
 import { isAuthenticated, logout } from './auth.js'
 
 const router = useRouter()
+
+const isDark = ref(false)
+
+function applyTheme() {
+  document.documentElement.classList.toggle('dark', isDark.value)
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+}
+
+function toggleDark() {
+  isDark.value = !isDark.value
+  applyTheme()
+}
+
+onMounted(() => {
+  isDark.value = localStorage.getItem('theme') === 'dark'
+  applyTheme()
+})
 
 const navLinks = [
   { to: '/recettes', icon: '📋', label: 'Recettes' },
@@ -62,6 +90,7 @@ const navLinks = [
   { to: '/ingredients', icon: '🥬', label: 'Ingrédients' },
   { to: '/hello-fresh', icon: '🥗', label: 'Echo Fresh' },
   { to: '/echo-frigo', icon: '🧊', label: 'Echo-frigo' },
+  { to: '/menu-image', icon: '🖼️', label: 'Affiche' },
 ]
 
 function handleLogout() {

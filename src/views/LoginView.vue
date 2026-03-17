@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-teal-900 via-teal-700 to-emerald-500 flex items-center justify-center p-4">
     <!-- Card -->
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+    <div class="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
       <!-- Header -->
       <div class="bg-gradient-to-br from-teal-800 to-emerald-600 px-8 py-8 text-center">
         <div class="text-5xl mb-3 select-none">🫕☠️</div>
@@ -14,7 +14,7 @@
       <form @submit.prevent="handleLogin" class="px-8 py-7 space-y-4">
         <!-- Username -->
         <div>
-          <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5">
+          <label class="block text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-1.5">
             Identifiant
           </label>
           <input
@@ -30,7 +30,7 @@
 
         <!-- Password -->
         <div>
-          <label class="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5">
+          <label class="block text-xs font-semibold text-stone-500 dark:text-stone-400 uppercase tracking-wider mb-1.5">
             Mot de passe
           </label>
           <div class="relative">
@@ -58,7 +58,7 @@
         <Transition name="err">
           <div
             v-if="error"
-            class="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-2.5 flex items-center gap-2"
+            class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 text-sm rounded-lg px-4 py-2.5 flex items-center gap-2"
           >
             <span>⚠️</span>
             <span>{{ error }}</span>

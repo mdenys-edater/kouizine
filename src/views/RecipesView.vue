@@ -3,20 +3,20 @@
     <!-- Stats row -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
       <div class="stat-card">
-        <div class="text-2xl font-bold text-teal-700">{{ recipes.length }}</div>
-        <div class="text-xs text-stone-500 mt-0.5">recettes</div>
+        <div class="text-2xl font-bold text-teal-700 dark:text-teal-400">{{ recipes.length }}</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">recettes</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-emerald-600">{{ minPrice }}€</div>
-        <div class="text-xs text-stone-500 mt-0.5">moins chère</div>
+        <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ minPrice }}€</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">moins chère</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-teal-700">{{ avgPrice }}€</div>
-        <div class="text-xs text-stone-500 mt-0.5">prix moyen</div>
+        <div class="text-2xl font-bold text-teal-700 dark:text-teal-400">{{ avgPrice }}€</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">prix moyen</div>
       </div>
       <div class="stat-card">
-        <div class="text-2xl font-bold text-teal-600">{{ maxPrice }}€</div>
-        <div class="text-xs text-stone-500 mt-0.5">plus chère</div>
+        <div class="text-2xl font-bold text-teal-600 dark:text-teal-400">{{ maxPrice }}€</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">plus chère</div>
       </div>
     </div>
 
@@ -57,13 +57,13 @@
       </div>
 
       <!-- Exclusion chips -->
-      <div v-if="excluded.length" class="w-full flex flex-wrap gap-1.5 pt-1 border-t border-stone-100">
+      <div v-if="excluded.length" class="w-full flex flex-wrap gap-1.5 pt-1 border-t border-stone-100 dark:border-stone-700">
         <span class="text-xs text-stone-400 self-center mr-1">Exclus :</span>
         <button
           v-for="ing in excluded"
           :key="ing"
           @click="removeExclusion(ing)"
-          class="flex items-center gap-1 text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full hover:bg-red-100 transition-colors"
+          class="flex items-center gap-1 text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full hover:bg-red-100 transition-colors dark:bg-red-900/40 dark:text-red-300 dark:hover:bg-red-900/60"
           title="Retirer l'exclusion"
         >
           <span>− {{ ing }}</span>
@@ -81,11 +81,11 @@
         v-for="recipe in filteredRecipes"
         :key="recipe.name"
         @click="selectedRecipe = recipe"
-        class="card p-4 cursor-pointer hover:shadow-md hover:border-teal-300 border border-transparent transition-all duration-150 group"
+        class="card p-4 cursor-pointer hover:shadow-md hover:border-teal-300 dark:hover:border-teal-700 border border-transparent transition-all duration-150 group"
       >
         <!-- Name + price -->
         <div class="flex items-start justify-between gap-2 mb-3">
-          <h3 class="font-semibold text-stone-800 group-hover:text-teal-700 transition-colors leading-snug text-sm">
+          <h3 class="font-semibold text-stone-800 dark:text-stone-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors leading-snug text-sm">
             {{ recipe.name }}
           </h3>
           <span :class="priceBadgeClass(recipe.price)" class="shrink-0 text-sm font-bold px-2.5 py-1 rounded-full">
@@ -100,8 +100,8 @@
             :key="ing"
             @click.stop="filterIngredient = ing"
             :class="fishIngredients.has(ing)
-              ? 'text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full hover:bg-blue-100 transition-colors'
-              : 'text-xs bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full hover:bg-teal-200 transition-colors'"
+              ? 'text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full hover:bg-blue-100 transition-colors dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60'
+              : 'text-xs bg-teal-50 text-teal-800 px-2 py-0.5 rounded-full hover:bg-teal-200 transition-colors dark:bg-teal-900/40 dark:text-teal-200 dark:hover:bg-teal-900/60'"
             :title="fishIngredients.has(ing) ? `${ing} (pêche — gratuit)` : `Filtrer par ${ing}`"
           >
             <span v-if="fishIngredients.has(ing)">🎣 </span>{{ ing }}
@@ -111,7 +111,7 @@
         <!-- Footer -->
         <div class="mt-3 flex items-center justify-between text-xs text-stone-400">
           <span>{{ recipe.ingredients.length }} ingrédient{{ recipe.ingredients.length > 1 ? 's' : '' }}</span>
-          <span class="text-teal-500 group-hover:text-teal-700 transition-colors">Voir →</span>
+          <span class="text-teal-500 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">Voir →</span>
         </div>
       </div>
     </div>

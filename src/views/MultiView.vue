@@ -6,19 +6,19 @@
       <!-- Header -->
       <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 class="text-xl font-bold text-stone-800">Composition du menu</h2>
-          <p class="text-stone-500 text-sm mt-1">
+          <h2 class="text-xl font-bold text-stone-800 dark:text-stone-100">Composition du menu</h2>
+          <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">
             Sélectionnez vos recettes et ajustez les quantités
           </p>
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-sm text-stone-500">
-            <span class="font-bold text-teal-700">{{ selected.length }}</span>/{{ MAX_SELECT }} recettes
+          <span class="text-sm text-stone-500 dark:text-stone-400">
+            <span class="font-bold text-teal-700 dark:text-teal-400">{{ selected.length }}</span>/{{ MAX_SELECT }} recettes
           </span>
           <button
             v-if="selected.length"
             @click="selected = []"
-            class="btn-ghost text-red-400 hover:text-red-600 hover:bg-red-50 text-sm"
+            class="btn-ghost text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 text-sm"
           >
             Tout effacer
           </button>
@@ -30,14 +30,14 @@
         <div
           v-for="item in selected"
           :key="item.recipe.name"
-          class="card border border-teal-200 p-4"
+          class="card border border-teal-200 dark:border-teal-800 p-4"
         >
           <!-- Name + remove -->
           <div class="flex items-start justify-between gap-2 mb-3">
-            <h4 class="font-bold text-stone-800 text-sm leading-tight">{{ item.recipe.name }}</h4>
+            <h4 class="font-bold text-stone-800 dark:text-stone-100 text-sm leading-tight">{{ item.recipe.name }}</h4>
             <button
               @click="removeRecipe(item.recipe)"
-              class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-stone-300 hover:text-red-400 hover:bg-red-50 transition-colors"
+              class="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-stone-300 hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
             >
               ✕
             </button>
@@ -49,20 +49,20 @@
             <div class="flex items-center gap-2">
               <button
                 @click="changeQty(item, -1)"
-                class="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold text-base transition-colors flex items-center justify-center leading-none"
+                class="w-7 h-7 rounded-full bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-600 dark:text-stone-300 font-bold text-base transition-colors flex items-center justify-center leading-none"
               >−</button>
-              <span class="font-bold text-teal-700 w-7 text-center tabular-nums">{{ item.qty }}</span>
+              <span class="font-bold text-teal-700 dark:text-teal-400 w-7 text-center tabular-nums">{{ item.qty }}</span>
               <button
                 @click="changeQty(item, +1)"
-                class="w-7 h-7 rounded-full bg-teal-100 hover:bg-teal-200 text-teal-700 font-bold text-base transition-colors flex items-center justify-center leading-none"
+                class="w-7 h-7 rounded-full bg-teal-100 dark:bg-teal-900/50 hover:bg-teal-200 dark:hover:bg-teal-900 text-teal-700 dark:text-teal-400 font-bold text-base transition-colors flex items-center justify-center leading-none"
               >+</button>
             </div>
           </div>
 
           <!-- Subtotal -->
-          <div class="pt-2.5 border-t border-stone-100 flex items-center justify-between">
+          <div class="pt-2.5 border-t border-stone-100 dark:border-stone-700 flex items-center justify-between">
             <span class="text-xs text-stone-400">{{ item.qty }} × {{ item.recipe.price }}€</span>
-            <span class="font-bold text-emerald-600">{{ item.qty * item.recipe.price }}€</span>
+            <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ item.qty * item.recipe.price }}€</span>
           </div>
         </div>
 
@@ -70,7 +70,7 @@
         <div
           v-for="i in MAX_SELECT - selected.length"
           :key="`slot-${i}`"
-          class="border-2 border-dashed border-stone-200 rounded-xl p-4 flex flex-col items-center justify-center text-stone-300 min-h-28 select-none"
+          class="border-2 border-dashed border-stone-200 dark:border-stone-700 rounded-xl p-4 flex flex-col items-center justify-center text-stone-300 dark:text-stone-600 min-h-28 select-none"
         >
           <span class="text-3xl mb-1">+</span>
           <span class="text-xs">Ajouter une recette</span>
@@ -80,7 +80,7 @@
       <!-- Empty state -->
       <div
         v-else
-        class="border-2 border-dashed border-teal-200 rounded-xl p-12 text-center text-stone-400 mb-5"
+        class="border-2 border-dashed border-teal-200 dark:border-teal-900 rounded-xl p-12 text-center text-stone-400 mb-5"
       >
         <div class="text-5xl mb-3">📋</div>
         <p class="font-medium">Aucune recette sélectionnée</p>
@@ -90,7 +90,7 @@
       <!-- Recipe picker -->
       <div class="card p-4">
         <div class="flex flex-wrap items-center gap-3 mb-4">
-          <h3 class="font-semibold text-stone-700">Choisir des recettes</h3>
+          <h3 class="font-semibold text-stone-700 dark:text-stone-200">Choisir des recettes</h3>
           <input
             v-model="search"
             type="text"
@@ -109,8 +109,8 @@
             :class="[
               'text-left p-3 rounded-xl border-2 transition-all duration-150',
               isSelected(recipe)
-                ? 'bg-teal-50 border-teal-400 shadow-sm'
-                : 'bg-stone-50 border-transparent hover:border-stone-200',
+                ? 'bg-teal-50 dark:bg-teal-900/40 border-teal-400 dark:border-teal-700 shadow-sm'
+                : 'bg-stone-50 dark:bg-stone-800 border-transparent hover:border-stone-200 dark:hover:border-stone-600',
               !isSelected(recipe) && selected.length >= MAX_SELECT
                 ? 'opacity-40 cursor-not-allowed'
                 : 'cursor-pointer',
@@ -118,14 +118,14 @@
           >
             <div
               class="font-medium leading-tight mb-1 text-xs"
-              :class="isSelected(recipe) ? 'text-teal-800' : 'text-stone-700'"
+              :class="isSelected(recipe) ? 'text-teal-800 dark:text-teal-200' : 'text-stone-700 dark:text-stone-300'"
             >
               {{ recipe.name }}
             </div>
             <div class="flex items-center justify-between">
               <span
                 class="text-xs"
-                :class="isSelected(recipe) ? 'text-teal-600' : 'text-stone-400'"
+                :class="isSelected(recipe) ? 'text-teal-600 dark:text-teal-400' : 'text-stone-400'"
               >{{ recipe.price }}€</span>
               <span v-if="isSelected(recipe)" class="text-teal-500 text-xs font-bold">✓</span>
             </div>
@@ -138,7 +138,7 @@
     <div class="lg:sticky lg:top-20">
       <div class="card p-5">
         <div class="flex items-center justify-between mb-1">
-          <h3 class="font-bold text-stone-800 text-base">🛒 Liste de courses</h3>
+          <h3 class="font-bold text-stone-800 dark:text-stone-100 text-base">🛒 Liste de courses</h3>
           <span v-if="shoppingList.length" class="text-xs text-stone-400">
             {{ shoppingList.length }} article{{ shoppingList.length > 1 ? 's' : '' }}
           </span>
@@ -152,31 +152,31 @@
               <div
                 v-for="item in shoppingList"
                 :key="item.name"
-                class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-3"
+                class="flex items-center justify-between py-2 border-b border-stone-50 dark:border-stone-800 last:border-0 gap-3"
               >
                 <div class="min-w-0">
-                  <div class="text-sm text-stone-700 font-medium truncate">{{ item.name }}</div>
+                  <div class="text-sm text-stone-700 dark:text-stone-200 font-medium truncate">{{ item.name }}</div>
                   <div class="text-xs text-stone-400">
                     {{ item.count }}×
-                    <span class="text-stone-300 mx-0.5">·</span>
+                    <span class="text-stone-300 dark:text-stone-600 mx-0.5">·</span>
                     {{ item.unitPrice }}€/u
                   </div>
                 </div>
-                <span class="font-semibold text-stone-700 shrink-0 tabular-nums">
+                <span class="font-semibold text-stone-700 dark:text-stone-200 shrink-0 tabular-nums">
                   {{ item.total }}€
                 </span>
               </div>
             </div>
 
             <!-- Summary footer -->
-            <div class="pt-4 border-t-2 border-stone-100 space-y-1.5">
-              <div class="flex justify-between text-sm text-stone-500">
+            <div class="pt-4 border-t-2 border-stone-100 dark:border-stone-700 space-y-1.5">
+              <div class="flex justify-between text-sm text-stone-500 dark:text-stone-400">
                 <span>{{ totalDishes }} plat{{ totalDishes > 1 ? 's' : '' }}</span>
                 <span>{{ selected.length }} recette{{ selected.length > 1 ? 's' : '' }}</span>
               </div>
               <div class="flex items-center justify-between">
-                <span class="font-bold text-stone-800 text-lg">Total ingrédients</span>
-                <span class="text-2xl font-bold text-emerald-600 tabular-nums">{{ grandTotal }}€</span>
+                <span class="font-bold text-stone-800 dark:text-stone-100 text-lg">Total ingrédients</span>
+                <span class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{{ grandTotal }}€</span>
               </div>
             </div>
           </div>
@@ -200,7 +200,6 @@ import { recipes, getIngredientPrice, expandIngredient } from '../data.js'
 
 const MAX_SELECT = 8
 const search = ref('')
-// selected: Array<{ recipe, qty }>
 const selected = ref([])
 
 const filtered = computed(() => {

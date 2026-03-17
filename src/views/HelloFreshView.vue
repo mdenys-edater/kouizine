@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
       <div>
-        <h2 class="text-xl font-bold text-stone-800">🥗 Echo Fresh</h2>
-        <p class="text-stone-500 text-sm mt-1">
+        <h2 class="text-xl font-bold text-stone-800 dark:text-stone-100">🥗 Echo Fresh</h2>
+        <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">
           8 plats × 60 portions · 2 desserts × 40 portions · liste de courses complète
         </p>
       </div>
@@ -18,20 +18,20 @@
     <Transition name="fade">
       <div v-if="generated" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <div class="stat-card">
-          <div class="text-2xl font-bold text-teal-700">480</div>
-          <div class="text-xs text-stone-500 mt-0.5">portions plats</div>
+          <div class="text-2xl font-bold text-teal-700 dark:text-teal-400">480</div>
+          <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">portions plats</div>
         </div>
         <div class="stat-card">
-          <div class="text-2xl font-bold text-teal-700">80</div>
-          <div class="text-xs text-stone-500 mt-0.5">portions desserts</div>
+          <div class="text-2xl font-bold text-teal-700 dark:text-teal-400">80</div>
+          <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">portions desserts</div>
         </div>
         <div class="stat-card">
-          <div class="text-2xl font-bold text-teal-700">{{ toBuyList.length }}</div>
-          <div class="text-xs text-stone-500 mt-0.5">à acheter</div>
+          <div class="text-2xl font-bold text-teal-700 dark:text-teal-400">{{ toBuyList.length }}</div>
+          <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">à acheter</div>
         </div>
         <div class="stat-card">
-          <div class="text-2xl font-bold text-emerald-600">{{ grandTotal.toLocaleString('fr') }}€</div>
-          <div class="text-xs text-stone-500 mt-0.5">coût total</div>
+          <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ grandTotal.toLocaleString('fr') }}€</div>
+          <div class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">coût total</div>
         </div>
       </div>
     </Transition>
@@ -42,30 +42,30 @@
       <!-- ── Plats ── -->
       <div class="card p-4">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold text-stone-700">🍽️ Plats</h3>
+          <h3 class="font-semibold text-stone-700 dark:text-stone-200">🍽️ Plats</h3>
           <span class="text-xs text-stone-400">8 recettes × 60 portions</span>
         </div>
         <div class="space-y-1.5">
           <div
             v-for="recipe in selectedPlats"
             :key="recipe.name"
-            class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-2"
+            class="flex items-center justify-between py-2 border-b border-stone-50 dark:border-stone-800 last:border-0 gap-2"
           >
             <div class="min-w-0">
-              <div class="text-sm text-stone-700">{{ recipe.name }}</div>
+              <div class="text-sm text-stone-700 dark:text-stone-200">{{ recipe.name }}</div>
               <div class="flex flex-wrap gap-1 mt-1">
                 <span
                   v-for="ing in recipe.ingredients"
                   :key="ing"
                   :class="fishIngredients.has(ing)
-                    ? 'badge bg-blue-50 text-blue-600 text-xs'
-                    : 'badge bg-stone-100 text-stone-400 text-xs'"
+                    ? 'badge bg-blue-50 text-blue-600 text-xs dark:bg-blue-900/40 dark:text-blue-300'
+                    : 'badge bg-stone-100 text-stone-400 text-xs dark:bg-stone-800 dark:text-stone-400'"
                 >
                   <span v-if="fishIngredients.has(ing)">🎣 </span>{{ ing }}
                 </span>
               </div>
             </div>
-            <span class="badge bg-teal-100 text-teal-700 shrink-0 tabular-nums ml-2">×60</span>
+            <span class="badge bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 shrink-0 tabular-nums ml-2">×60</span>
           </div>
         </div>
       </div>
@@ -73,37 +73,37 @@
       <!-- ── Desserts ── -->
       <div class="card p-4">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold text-stone-700">🍰 Desserts</h3>
+          <h3 class="font-semibold text-stone-700 dark:text-stone-200">🍰 Desserts</h3>
           <span class="text-xs text-stone-400">2 recettes × 40 portions</span>
         </div>
         <div class="space-y-1.5">
           <div
             v-for="recipe in selectedDesserts"
             :key="recipe.name"
-            class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-2"
+            class="flex items-center justify-between py-2 border-b border-stone-50 dark:border-stone-800 last:border-0 gap-2"
           >
             <div class="min-w-0">
-              <div class="text-sm text-stone-700">{{ recipe.name }}</div>
+              <div class="text-sm text-stone-700 dark:text-stone-200">{{ recipe.name }}</div>
               <div class="flex flex-wrap gap-1 mt-1">
                 <span
                   v-for="ing in recipe.ingredients"
                   :key="ing"
                   :class="fishIngredients.has(ing)
-                    ? 'badge bg-blue-50 text-blue-600 text-xs'
-                    : 'badge bg-stone-100 text-stone-400 text-xs'"
+                    ? 'badge bg-blue-50 text-blue-600 text-xs dark:bg-blue-900/40 dark:text-blue-300'
+                    : 'badge bg-stone-100 text-stone-400 text-xs dark:bg-stone-800 dark:text-stone-400'"
                 >
                   <span v-if="fishIngredients.has(ing)">🎣 </span>{{ ing }}
                 </span>
               </div>
             </div>
-            <span class="badge bg-teal-100 text-teal-700 shrink-0 tabular-nums ml-2">×40</span>
+            <span class="badge bg-teal-100 text-teal-700 dark:bg-teal-900/50 dark:text-teal-300 shrink-0 tabular-nums ml-2">×40</span>
           </div>
         </div>
       </div>
 
       <!-- ── Liste de courses (sticky) ── -->
       <div class="lg:sticky lg:top-20 card p-5">
-        <h3 class="font-bold text-stone-800 mb-4">🛒 Liste de courses</h3>
+        <h3 class="font-bold text-stone-800 dark:text-stone-100 mb-4">🛒 Liste de courses</h3>
 
         <!-- À acheter -->
         <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">
@@ -113,17 +113,17 @@
           <div
             v-for="item in toBuyList"
             :key="item.name"
-            class="flex items-center justify-between py-2 border-b border-stone-50 last:border-0 gap-3"
+            class="flex items-center justify-between py-2 border-b border-stone-50 dark:border-stone-800 last:border-0 gap-3"
           >
             <div class="min-w-0">
-              <div class="text-sm text-stone-700 font-medium truncate">{{ item.name }}</div>
+              <div class="text-sm text-stone-700 dark:text-stone-200 font-medium truncate">{{ item.name }}</div>
               <div class="text-xs text-stone-400">
                 {{ item.count.toLocaleString('fr') }}×
-                <span class="text-stone-300 mx-0.5">·</span>
+                <span class="text-stone-300 dark:text-stone-600 mx-0.5">·</span>
                 {{ item.unitPrice }}€/u
               </div>
             </div>
-            <span class="font-semibold text-stone-700 shrink-0 tabular-nums">
+            <span class="font-semibold text-stone-700 dark:text-stone-200 shrink-0 tabular-nums">
               {{ item.total.toLocaleString('fr') }}€
             </span>
           </div>
@@ -137,9 +137,9 @@
           <div
             v-for="item in toFishList"
             :key="item.name"
-            class="flex items-center justify-between py-1.5 border-b border-stone-50 last:border-0 gap-3"
+            class="flex items-center justify-between py-1.5 border-b border-stone-50 dark:border-stone-800 last:border-0 gap-3"
           >
-            <div class="text-sm text-stone-600 font-medium truncate">{{ item.name }}</div>
+            <div class="text-sm text-stone-600 dark:text-stone-300 font-medium truncate">{{ item.name }}</div>
             <div class="flex items-center gap-2 shrink-0">
               <span class="text-xs text-stone-400 tabular-nums">{{ item.count.toLocaleString('fr') }}×</span>
               <span class="text-xs text-blue-500 font-medium">Gratuit</span>
@@ -147,10 +147,10 @@
           </div>
         </div>
 
-        <div class="pt-4 border-t-2 border-stone-100">
+        <div class="pt-4 border-t-2 border-stone-100 dark:border-stone-700">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-stone-800 text-lg">Total achats</span>
-            <span class="text-2xl font-bold text-emerald-600 tabular-nums">
+            <span class="font-bold text-stone-800 dark:text-stone-100 text-lg">Total achats</span>
+            <span class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
               {{ grandTotal.toLocaleString('fr') }}€
             </span>
           </div>
@@ -161,7 +161,7 @@
     <!-- Empty state -->
     <div v-if="!generated && !loading" class="flex flex-col items-center justify-center py-24 text-stone-400">
       <div class="text-7xl mb-5 select-none">🎲</div>
-      <p class="text-lg font-semibold text-stone-600">Aucun menu généré</p>
+      <p class="text-lg font-semibold text-stone-600 dark:text-stone-300">Aucun menu généré</p>
       <p class="text-sm mt-2 text-center max-w-sm leading-relaxed">
         Génère 8 plats aléatoires et 2 desserts avec la liste de courses complète.
       </p>
