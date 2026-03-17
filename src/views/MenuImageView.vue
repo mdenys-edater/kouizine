@@ -314,20 +314,7 @@ function drawMenu() {
         ctx.font = '500 20px system-ui, -apple-system, sans-serif'
         ctx.textAlign = 'left'
         ctx.textBaseline = 'middle'
-        const nameMaxW = CARD_W - 90
-        ctx.fillText(fitText(ctx, recipe.name, nameMaxW), x + 18, y + CARD_H / 2)
-
-        const priceStr = `${recipe.price}€`
-        ctx.font = 'bold 17px system-ui, sans-serif'
-        const pw = ctx.measureText(priceStr).width
-        const bx = x + CARD_W - pw - 24
-        const by = y + CARD_H / 2 - 13
-        roundRect(ctx, bx - 8, by, pw + 16, 26, 6)
-        ctx.fillStyle = 'rgba(20,184,166,0.2)'
-        ctx.fill()
-        ctx.fillStyle = '#5eead4'
-        ctx.textAlign = 'left'
-        ctx.fillText(priceStr, bx, by + 13)
+        ctx.fillText(fitText(ctx, recipe.name, CARD_W - 36), x + 18, y + CARD_H / 2)
       }
     }
 
