@@ -343,7 +343,7 @@ function drawMenu() {
   ctx.font = '500 15px Georgia, serif'
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  ctx.fillText('✦  Kouizine  ✦', cx, H - FOOTER_H / 2)
+  ctx.fillText('✦  By Echo for all Egos  ✦', cx, H - FOOTER_H / 2)
 }
 
 watch(selection, () => nextTick(drawMenu), { deep: true })
