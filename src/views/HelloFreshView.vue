@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
       <div>
-        <h2 class="text-xl font-bold text-stone-800">🥗 Hello Fresh</h2>
+        <h2 class="text-xl font-bold text-stone-800">🥗 Echo Fresh</h2>
         <p class="text-stone-500 text-sm mt-1">
           8 plats × 60 portions · 2 desserts × 40 portions · liste de courses complète
         </p>
@@ -213,9 +213,22 @@ const platRecipes = recipes.filter(r => !DESSERT_NAMES.has(r.name) && !DRINK_NAM
 const dessertRecipes = recipes.filter(r => DESSERT_NAMES.has(r.name))
 
 // ── État ─────────────────────────────────────────────────────────────────────
-const selectedPlats = ref([])
-const selectedDesserts = ref([])
-const generated = ref(false)
+const STORAGE_KEY = 'echoFreshMenu'
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+const saved = loadSaved()
+const selectedPlats = ref(saved ? recipes.filter(r => saved.plats.includes(r.name)) : [])
+const selectedDesserts = ref(saved ? recipes.filter(r => saved.desserts.includes(r.name)) : [])
+const generated = ref(!!saved)
 const loading = ref(false)
 
 // ── Génération ───────────────────────────────────────────────────────────────
@@ -235,6 +248,10 @@ async function generate() {
   selectedDesserts.value = shuffle(dessertRecipes).slice(0, 2)
   generated.value = true
   loading.value = false
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    plats: selectedPlats.value.map(r => r.name),
+    desserts: selectedDesserts.value.map(r => r.name),
+  }))
 }
 
 // ── Liste de courses ──────────────────────────────────────────────────────────

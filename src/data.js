@@ -40,6 +40,7 @@ export const ingredients = [
   { name: 'Viande de gibier', price: 17 },
   { name: 'Saucisson', price: 11 },
   { name: 'Viande sechee', price: 11 },
+  { name: 'Jambon', price: 8 },
 ]
 
 export const recipes = [
@@ -54,7 +55,7 @@ export const recipes = [
   { name: 'Cotes de porc legumes', ingredients: ['Cote de porc', 'Haricot', 'Pomme de Terre'], price: 18 },
   { name: 'Couscous', ingredients: ['Saucisse de porc', 'Tomate', 'Cuisse de volaille', 'Semoule'], price: 33 },
   { name: 'Crepe', ingredients: ['Farine', 'Lait', 'Sucre'], price: 17 },
-  { name: 'Croque-Monsieur', ingredients: ['Pain', 'Cote de porc', 'Beurre', 'Fromage'], price: 29 },
+  { name: 'Croque-Monsieur', ingredients: ['Pain', 'Jambon', 'Beurre', 'Fromage'], price: 29 },
   { name: "Dango Fruite", ingredients: ['Farine', 'Sucre', 'Fraise', 'Orange', 'Pomme'], price: 27 },
   { name: "Donut's fraise", ingredients: ['Beurre', 'Farine', 'Sucre', 'Fraise'], price: 27 },
   { name: 'Fish & chips', ingredients: ['Farine', 'Oeuf', 'Truite', 'Frite'], price: 20 },
@@ -88,7 +89,7 @@ export const recipes = [
   { name: 'Pates au saumon', ingredients: ['Pate fraiche', 'Lait', 'Saumon'], price: 25 },
   { name: 'Pizza canibale', ingredients: ['Pate a Pizza', 'Tomate', 'Oignon', 'Steack hache', 'Saucisse de porc', 'Fromage'], price: 48 },
   { name: 'Pizza fruitee', ingredients: ['Pate a Pizza', 'Pomme', 'Orange', 'Tomate'], price: 30 },
-  { name: 'Pizza jambon', ingredients: ['Pate a Pizza', 'Tomate', 'Cote de porc'], price: 28 },
+  { name: 'Pizza jambon', ingredients: ['Pate a Pizza', 'Tomate', 'Cote de porc', 'Fromage'], price: 28 },
   { name: 'Pizza Margherita', ingredients: ['Pate a Pizza', 'Fromage', 'Tomate'], price: 25 },
   { name: "Porc farci a l'orange", ingredients: ['Cote de porc', 'Pain', 'Orange', 'Pomme'], price: 24 },
   { name: 'Porc Chop', ingredients: ['Cote de porc', 'Tomate', 'Oignon'], price: 18 },
@@ -130,6 +131,30 @@ export const fishIngredients = new Set([
   'Thon',
   'Truite',
 ])
+
+// Ingrédients intermédiaires : map vers leurs composants de base
+export const intermediateIngredients = {
+  'Beurre':       [{ name: 'Lait', qty: 2 }],
+  'Crème fraiche':[{ name: 'Lait', qty: 3 }],
+  'Frite':        [{ name: 'Pomme de Terre', qty: 1 }],
+  'Fromage':      [{ name: 'Lait', qty: 1 }],
+  'Pain a burger':[{ name: 'Pain', qty: 1 }],
+  'Pate':         [{ name: 'Farine', qty: 1 }, { name: 'Oeuf', qty: 1 }, { name: 'Lait', qty: 1 }],
+  'Pate fraiche': [{ name: 'Pate', qty: 1 }],
+  'Pate a Pizza': [{ name: 'Pate', qty: 1 }],
+  'Semoule':      [{ name: 'Farine', qty: 1 }, { name: 'Lait', qty: 1 }],
+}
+
+// Résout récursivement un ingrédient vers ses composants de base
+export function expandIngredient(name, qty = 1) {
+  const subs = intermediateIngredients[name]
+  if (!subs) return [{ name, qty }]
+  const result = []
+  for (const sub of subs) {
+    result.push(...expandIngredient(sub.name, sub.qty * qty))
+  }
+  return result
+}
 
 export function getIngredientPrice(name) {
   return ingredients.find(i => i.name === name)?.price ?? 0

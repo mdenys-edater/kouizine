@@ -196,7 +196,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { recipes, getIngredientPrice } from '../data.js'
+import { recipes, getIngredientPrice, expandIngredient } from '../data.js'
 
 const MAX_SELECT = 8
 const search = ref('')
@@ -232,17 +232,21 @@ function changeQty(item, delta) {
 }
 
 // Agrège tous les ingrédients de toutes les recettes × quantités
+// Les ingrédients intermédiaires sont développés en leurs composants de base
 const shoppingList = computed(() => {
   const map = new Map()
   for (const { recipe, qty } of selected.value) {
     for (const ingName of recipe.ingredients) {
-      const unitPrice = getIngredientPrice(ingName)
-      if (map.has(ingName)) {
-        const entry = map.get(ingName)
-        entry.count += qty
-        entry.total += unitPrice * qty
-      } else {
-        map.set(ingName, { name: ingName, count: qty, unitPrice, total: unitPrice * qty })
+      for (const { name, qty: baseQty } of expandIngredient(ingName)) {
+        const unitPrice = getIngredientPrice(name)
+        const total = unitPrice * baseQty * qty
+        if (map.has(name)) {
+          const entry = map.get(name)
+          entry.count += baseQty * qty
+          entry.total += total
+        } else {
+          map.set(name, { name, count: baseQty * qty, unitPrice, total })
+        }
       }
     }
   }
