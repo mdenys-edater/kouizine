@@ -110,13 +110,29 @@
           <div
             v-for="item in filteredRecipes"
             :key="item.recipe.name"
-            class="card p-4 flex flex-col gap-3"
+            @click="toggleSelected(item.recipe.name)"
+            :class="[
+              'card p-4 flex flex-col gap-3 cursor-pointer transition-all duration-150',
+              selected.has(item.recipe.name)
+                ? 'ring-2 ring-teal-500 dark:ring-teal-400 shadow-md'
+                : 'hover:shadow-md',
+            ]"
           >
             <!-- Nom + portions -->
             <div class="flex items-start justify-between gap-2">
-              <h4 class="font-semibold text-stone-800 dark:text-stone-100 text-sm leading-tight">
-                {{ item.recipe.name }}
-              </h4>
+              <div class="flex items-center gap-2 min-w-0">
+                <span
+                  :class="[
+                    'shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-colors text-xs',
+                    selected.has(item.recipe.name)
+                      ? 'bg-teal-500 border-teal-500 text-white'
+                      : 'border-stone-300 dark:border-stone-600',
+                  ]"
+                >{{ selected.has(item.recipe.name) ? '✓' : '' }}</span>
+                <h4 class="font-semibold text-stone-800 dark:text-stone-100 text-sm leading-tight">
+                  {{ item.recipe.name }}
+                </h4>
+              </div>
               <span
                 :class="[
                   'badge shrink-0 font-semibold tabular-nums',
@@ -165,7 +181,9 @@
       <!-- ── Liste de courses (sticky) ── -->
       <div v-if="hasCatch && shoppingList.length > 0" class="lg:sticky lg:top-20 card p-5">
         <h3 class="font-bold text-stone-800 dark:text-stone-100 mb-1">🛒 Liste de courses</h3>
-        <p class="text-xs text-stone-400 mb-4">Pour toutes les recettes prêtes</p>
+        <p class="text-xs text-stone-400 mb-4">
+          {{ selected.size > 0 ? `${selected.size} recette${selected.size > 1 ? 's' : ''} sélectionnée${selected.size > 1 ? 's' : ''}` : 'Toutes les recettes prêtes' }}
+        </p>
 
         <div class="space-y-1 max-h-[55vh] overflow-y-auto -mx-1 px-1 mb-4">
           <div
@@ -228,6 +246,7 @@ function fishEmoji(name) {
 // Map fish → quantity
 const catchQty = ref(new Map())
 const filter = ref('all')
+const selected = ref(new Set())
 
 const hasCatch = computed(() => [...catchQty.value.values()].some(q => q > 0))
 
@@ -250,6 +269,13 @@ function decrement(name) {
 
 function clearCatch() {
   catchQty.value = new Map()
+  selected.value = new Set()
+}
+
+function toggleSelected(name) {
+  const next = new Set(selected.value)
+  next.has(name) ? next.delete(name) : next.add(name)
+  selected.value = next
 }
 
 // Nombre max de portions d'une recette basé sur les quantités de poisson disponibles
@@ -299,11 +325,12 @@ const filteredRecipes = computed(() => {
   return scoredRecipes.value
 })
 
-// Liste de courses : agrégation des ingrédients non-poisson pour toutes les recettes "prêtes"
+// Liste de courses : recettes sélectionnées, ou toutes les prêtes si aucune sélection
 const shoppingList = computed(() => {
   const map = new Map()
   for (const item of scoredRecipes.value) {
     if (item.missingFish.length > 0 || item.maxServings === 0) continue
+    if (selected.value.size > 0 && !selected.value.has(item.recipe.name)) continue
     for (const { name, price } of item.missingBuy) {
       const count = item.maxServings
       if (map.has(name)) {
