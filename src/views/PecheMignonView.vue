@@ -4,18 +4,18 @@
     <div class="mb-6">
       <h2 class="text-xl font-bold text-stone-800 dark:text-stone-100">🎣 Pêche Mignon</h2>
       <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">
-        Sélectionnez votre prise du jour et trouvez les recettes les plus rentables
+        Renseignez votre prise du jour pour obtenir les recettes et la liste de courses
       </p>
     </div>
 
-    <div class="grid lg:grid-cols-[280px_1fr] gap-6 items-start">
+    <div class="grid lg:grid-cols-[260px_1fr_300px] gap-6 items-start">
 
       <!-- ── Panier de pêche (sticky) ── -->
       <div class="lg:sticky lg:top-20 card p-4">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold text-stone-700 dark:text-stone-200">🧺 Ma prise</h3>
           <button
-            v-if="catch_.size"
+            v-if="hasCatch"
             @click="clearCatch"
             class="text-xs text-red-400 hover:text-red-600 transition-colors"
           >
@@ -23,45 +23,61 @@
           </button>
         </div>
 
-        <div class="space-y-1.5">
-          <button
+        <div class="space-y-2">
+          <div
             v-for="fish in fishList"
             :key="fish"
-            @click="toggleCatch(fish)"
-            :class="[
-              'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150 border',
-              catch_.has(fish)
-                ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700 text-blue-800 dark:text-blue-200 font-medium shadow-sm'
-                : 'border-transparent hover:bg-stone-50 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300',
-            ]"
+            class="flex items-center gap-2"
           >
-            <span class="text-lg">{{ fishEmoji(fish) }}</span>
-            <span class="flex-1 text-left">{{ fish }}</span>
-            <span v-if="catch_.has(fish)" class="text-blue-400 dark:text-blue-300 text-xs">✓</span>
-          </button>
+            <span class="text-lg w-7 text-center select-none shrink-0">{{ fishEmoji(fish) }}</span>
+            <span
+              :class="[
+                'flex-1 text-sm truncate transition-colors',
+                qty(fish) > 0
+                  ? 'text-blue-700 dark:text-blue-300 font-medium'
+                  : 'text-stone-500 dark:text-stone-400',
+              ]"
+            >{{ fish }}</span>
+            <div class="flex items-center gap-1 shrink-0">
+              <button
+                @click="decrement(fish)"
+                :disabled="qty(fish) === 0"
+                class="w-7 h-7 rounded-lg text-sm font-bold transition-colors disabled:opacity-25
+                       bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700
+                       text-stone-600 dark:text-stone-300 disabled:cursor-not-allowed"
+              >−</button>
+              <span
+                :class="[
+                  'w-7 text-center tabular-nums text-sm font-semibold',
+                  qty(fish) > 0 ? 'text-blue-600 dark:text-blue-400' : 'text-stone-300 dark:text-stone-600',
+                ]"
+              >{{ qty(fish) }}</span>
+              <button
+                @click="increment(fish)"
+                class="w-7 h-7 rounded-lg text-sm font-bold transition-colors
+                       bg-teal-100 dark:bg-teal-900/50 hover:bg-teal-200 dark:hover:bg-teal-800
+                       text-teal-700 dark:text-teal-300"
+              >+</button>
+            </div>
+          </div>
         </div>
 
-        <div v-if="catch_.size" class="mt-4 pt-3 border-t border-stone-100 dark:border-stone-700">
-          <p class="text-xs text-stone-400 mb-2">
-            {{ catch_.size }} espèce{{ catch_.size > 1 ? 's' : '' }} pêchée{{ catch_.size > 1 ? 's' : '' }}
-          </p>
-          <div class="flex flex-wrap gap-1">
-            <span
-              v-for="fish in catch_"
-              :key="fish"
-              class="badge bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs"
-            >
-              {{ fishEmoji(fish) }} {{ fish }}
-            </span>
+        <div v-if="hasCatch" class="mt-4 pt-3 border-t border-stone-100 dark:border-stone-700 space-y-1">
+          <div
+            v-for="fish in fishList.filter(f => qty(f) > 0)"
+            :key="fish"
+            class="flex items-center justify-between text-xs"
+          >
+            <span class="text-stone-500 dark:text-stone-400">{{ fishEmoji(fish) }} {{ fish }}</span>
+            <span class="font-semibold text-blue-600 dark:text-blue-400 tabular-nums">×{{ qty(fish) }}</span>
           </div>
         </div>
       </div>
 
       <!-- ── Recettes ── -->
       <div>
-
         <!-- Filtres -->
-        <div v-if="catch_.size" class="flex flex-wrap gap-2 mb-4">
+        <div v-if="hasCatch" class="flex flex-wrap gap-2 mb-4">
           <button @click="filter = 'all'" :class="tabClass('all')">
             Toutes ({{ scoredRecipes.length }})
           </button>
@@ -74,11 +90,11 @@
         </div>
 
         <!-- Empty state : rien pêché -->
-        <div v-if="!catch_.size" class="flex flex-col items-center justify-center py-24 text-stone-400">
+        <div v-if="!hasCatch" class="flex flex-col items-center justify-center py-24 text-stone-400">
           <div class="text-7xl mb-5 select-none">🎣</div>
           <p class="text-lg font-semibold text-stone-600 dark:text-stone-300">Filets vides</p>
           <p class="text-sm mt-2 text-center max-w-sm leading-relaxed">
-            Sélectionnez ce que vous avez pêché pour voir les recettes réalisables.
+            Renseignez les quantités pêchées pour voir les recettes et la liste de courses.
           </p>
         </div>
 
@@ -90,37 +106,37 @@
         </div>
 
         <!-- Grille de recettes -->
-        <div v-else class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div v-else class="grid sm:grid-cols-2 gap-3">
           <div
             v-for="item in filteredRecipes"
             :key="item.recipe.name"
             class="card p-4 flex flex-col gap-3"
           >
-            <!-- Nom + score -->
+            <!-- Nom + portions -->
             <div class="flex items-start justify-between gap-2">
               <h4 class="font-semibold text-stone-800 dark:text-stone-100 text-sm leading-tight">
                 {{ item.recipe.name }}
               </h4>
               <span
                 :class="[
-                  'badge shrink-0 font-semibold',
-                  item.missingAll.length === 0
+                  'badge shrink-0 font-semibold tabular-nums',
+                  item.maxServings > 0 && item.missingFish.length === 0
                     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300'
                     : 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
                 ]"
               >
-                {{ item.fishUsed }}/{{ item.totalFish }} 🎣
+                {{ item.maxServings > 0 ? `×${item.maxServings}` : '×0' }}
               </span>
             </div>
 
-            <!-- Ingrédients -->
+            <!-- Ingrédients colorés -->
             <div class="flex flex-wrap gap-1">
               <span
                 v-for="ing in item.recipe.ingredients"
                 :key="ing"
                 :class="[
                   'badge text-xs',
-                  catch_.has(ing)
+                  qty(ing) > 0
                     ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
                     : fishIngredients.has(ing)
                       ? 'bg-red-50 text-red-500 line-through dark:bg-red-900/30 dark:text-red-400'
@@ -132,55 +148,67 @@
             </div>
 
             <!-- Pied de carte -->
-            <div class="pt-2 border-t border-stone-100 dark:border-stone-700 mt-auto">
-              <div v-if="item.missingAll.length === 0" class="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                ✓ Tout disponible !
+            <div class="pt-2 border-t border-stone-100 dark:border-stone-700 mt-auto text-xs">
+              <div v-if="item.missingFish.length === 0 && item.maxServings > 0">
+                <span class="text-emerald-600 dark:text-emerald-400 font-medium">✓ Prête</span>
+                <span class="text-stone-400 ml-1.5">— acheter {{ item.missingBuy.map(m => m.name).join(', ') || 'rien' }}</span>
               </div>
-              <div v-else>
-                <!-- Poissons manquants -->
-                <div v-if="item.missingFish.length" class="mb-2">
-                  <p class="text-xs text-blue-400 dark:text-blue-500 mb-1">🎣 À pêcher aussi</p>
-                  <div class="flex flex-wrap gap-1">
-                    <span
-                      v-for="f in item.missingFish"
-                      :key="f"
-                      class="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-2 py-0.5 rounded-full"
-                    >
-                      {{ f }}
-                    </span>
-                  </div>
-                </div>
-                <!-- Ingrédients à acheter -->
-                <div v-if="item.missingBuy.length">
-                  <p class="text-xs text-stone-400 mb-1">🛒 À acheter</p>
-                  <div class="flex flex-wrap gap-1">
-                    <span
-                      v-for="m in item.missingBuy"
-                      :key="m.name"
-                      class="text-xs bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 px-2 py-0.5 rounded-full"
-                    >
-                      {{ m.name }}&nbsp;<span class="text-stone-400">{{ m.price }}€</span>
-                    </span>
-                  </div>
-                  <p class="text-right text-xs font-semibold text-amber-600 dark:text-amber-400 mt-1.5">
-                    +{{ item.buyCost }}€
-                  </p>
-                </div>
+              <div v-else-if="item.missingFish.length">
+                <span class="text-blue-400">🎣 Manque :</span>
+                <span class="text-stone-500 dark:text-stone-400 ml-1">{{ item.missingFish.join(', ') }}</span>
               </div>
             </div>
           </div>
         </div>
-
       </div>
+
+      <!-- ── Liste de courses (sticky) ── -->
+      <div v-if="hasCatch && shoppingList.length > 0" class="lg:sticky lg:top-20 card p-5">
+        <h3 class="font-bold text-stone-800 dark:text-stone-100 mb-1">🛒 Liste de courses</h3>
+        <p class="text-xs text-stone-400 mb-4">Pour toutes les recettes prêtes</p>
+
+        <div class="space-y-1 max-h-[55vh] overflow-y-auto -mx-1 px-1 mb-4">
+          <div
+            v-for="item in shoppingList"
+            :key="item.name"
+            class="flex items-center justify-between py-2 border-b border-stone-50 dark:border-stone-800 last:border-0 gap-3"
+          >
+            <div class="min-w-0">
+              <div class="text-sm text-stone-700 dark:text-stone-200 font-medium truncate">{{ item.name }}</div>
+              <div class="text-xs text-stone-400">
+                {{ item.count }}×
+                <span class="text-stone-300 dark:text-stone-600 mx-0.5">·</span>
+                {{ item.unitPrice }}€/u
+              </div>
+            </div>
+            <span class="font-semibold text-stone-700 dark:text-stone-200 shrink-0 tabular-nums">
+              {{ item.total }}€
+            </span>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t-2 border-stone-100 dark:border-stone-700 flex items-center justify-between">
+          <span class="font-bold text-stone-800 dark:text-stone-100">Total</span>
+          <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
+            {{ grandTotal }}€
+          </span>
+        </div>
+      </div>
+
+      <!-- Placeholder liste si pas de recettes prêtes -->
+      <div v-else-if="hasCatch" class="lg:sticky lg:top-20 card p-5 flex flex-col items-center justify-center py-12 text-stone-400">
+        <div class="text-4xl mb-3 select-none">🛒</div>
+        <p class="text-sm text-center">Aucune recette complète<br>pour l'instant</p>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
-import { recipes, ingredients, fishIngredients, getIngredientPrice } from '../data.js'
+import { recipes, fishIngredients, getIngredientPrice } from '../data.js'
 
-// Liste ordonnée des poissons disponibles
 const fishList = [...fishIngredients].sort((a, b) => a.localeCompare(b, 'fr'))
 
 const EMOJI_MAP = {
@@ -197,32 +225,52 @@ function fishEmoji(name) {
   return EMOJI_MAP[name] ?? '🐟'
 }
 
-const catch_ = ref(new Set())
+// Map fish → quantity
+const catchQty = ref(new Map())
 const filter = ref('all')
 
-function toggleCatch(name) {
-  const next = new Set(catch_.value)
-  next.has(name) ? next.delete(name) : next.add(name)
-  catch_.value = next
+const hasCatch = computed(() => [...catchQty.value.values()].some(q => q > 0))
+
+function qty(name) {
+  return catchQty.value.get(name) ?? 0
+}
+
+function increment(name) {
+  const next = new Map(catchQty.value)
+  next.set(name, (next.get(name) ?? 0) + 1)
+  catchQty.value = next
+}
+
+function decrement(name) {
+  const next = new Map(catchQty.value)
+  const cur = next.get(name) ?? 0
+  if (cur > 0) next.set(name, cur - 1)
+  catchQty.value = next
 }
 
 function clearCatch() {
-  catch_.value = new Set()
+  catchQty.value = new Map()
 }
 
-// Recettes qui utilisent au moins un poisson de la prise
+// Nombre max de portions d'une recette basé sur les quantités de poisson disponibles
+function maxServingsFor(recipe) {
+  const fishNeeded = recipe.ingredients.filter(ing => fishIngredients.has(ing))
+  if (fishNeeded.length === 0) return 0
+  // Limité par le poisson le moins disponible
+  return Math.min(...fishNeeded.map(ing => qty(ing)))
+}
+
 const scoredRecipes = computed(() => {
   return recipes
-    .filter(r => r.ingredients.some(ing => catch_.value.has(ing)))
+    .filter(r => r.ingredients.some(ing => fishIngredients.has(ing) && qty(ing) > 0))
     .map(recipe => {
       const fishInRecipe = recipe.ingredients.filter(ing => fishIngredients.has(ing))
-      const fishUsed = fishInRecipe.filter(ing => catch_.value.has(ing)).length
-      const missingFish = fishInRecipe.filter(ing => !catch_.value.has(ing))
+      const fishUsed = fishInRecipe.filter(ing => qty(ing) > 0).length
+      const missingFish = fishInRecipe.filter(ing => qty(ing) === 0)
       const missingBuy = recipe.ingredients
         .filter(ing => !fishIngredients.has(ing))
         .map(ing => ({ name: ing, price: getIngredientPrice(ing) }))
-      const missingAll = [...missingFish, ...missingBuy.map(m => m.name)]
-      const buyCost = missingBuy.reduce((s, m) => s + m.price, 0)
+      const maxServings = maxServingsFor(recipe)
 
       return {
         recipe,
@@ -230,29 +278,47 @@ const scoredRecipes = computed(() => {
         totalFish: fishInRecipe.length,
         missingFish,
         missingBuy,
-        missingAll,
-        buyCost,
+        maxServings,
       }
     })
-    // Optimisation : d'abord les recettes les plus complètes en poisson,
-    // ensuite par coût d'achat croissant
     .sort((a, b) =>
-      b.fishUsed - a.fishUsed ||
       a.missingFish.length - b.missingFish.length ||
-      a.buyCost - b.buyCost
+      b.maxServings - a.maxServings ||
+      a.missingBuy.length - b.missingBuy.length
     )
 })
 
-const readyCount = computed(() => scoredRecipes.value.filter(i => i.missingAll.length === 0).length)
+const readyCount = computed(() => scoredRecipes.value.filter(i => i.missingFish.length === 0).length)
 const almostCount = computed(() =>
-  scoredRecipes.value.filter(i => i.missingAll.length >= 1 && i.missingAll.length <= 2).length
+  scoredRecipes.value.filter(i => i.missingFish.length >= 1 && i.missingFish.length <= 1).length
 )
 
 const filteredRecipes = computed(() => {
-  if (filter.value === 'ready') return scoredRecipes.value.filter(i => i.missingAll.length === 0)
-  if (filter.value === 'almost') return scoredRecipes.value.filter(i => i.missingAll.length >= 1 && i.missingAll.length <= 2)
+  if (filter.value === 'ready') return scoredRecipes.value.filter(i => i.missingFish.length === 0)
+  if (filter.value === 'almost') return scoredRecipes.value.filter(i => i.missingFish.length === 1)
   return scoredRecipes.value
 })
+
+// Liste de courses : agrégation des ingrédients non-poisson pour toutes les recettes "prêtes"
+const shoppingList = computed(() => {
+  const map = new Map()
+  for (const item of scoredRecipes.value) {
+    if (item.missingFish.length > 0 || item.maxServings === 0) continue
+    for (const { name, price } of item.missingBuy) {
+      const count = item.maxServings
+      if (map.has(name)) {
+        const e = map.get(name)
+        e.count += count
+        e.total += price * count
+      } else {
+        map.set(name, { name, count, unitPrice: price, total: price * count })
+      }
+    }
+  }
+  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+})
+
+const grandTotal = computed(() => shoppingList.value.reduce((s, i) => s + i.total, 0))
 
 function tabClass(f) {
   return filter.value === f
