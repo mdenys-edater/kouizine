@@ -91,6 +91,7 @@ const navLinks = [
   { to: '/hello-fresh', icon: '🥗', label: 'Echo Fresh' },
   { to: '/echo-frigo', icon: '🧊', label: 'Echo-frigo' },
   { to: '/menu-image', icon: '🖼️', label: 'Affiche' },
+  { to: '/peche-mignon', icon: '🎣', label: 'Pêche Mignon' },
 ]
 
 function handleLogout() {
